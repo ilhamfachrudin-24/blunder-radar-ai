@@ -1,5 +1,62 @@
 # 🔥 Blunder Radar AI
 
+## 🖥️ Platform Preview
+
+Blunder Radar AI dashboard provides AI-powered analysis for Solana tokens, including:
+
+- Token Intelligence
+- Risk Detection
+- Security Scanner
+- Smart Money Tracking
+- AI Research Report
+
+Token Address
+
+  ↓
+
+DexScreener Market Data
+
+  ↓
+
+Risk Engine
+
+  ↓
+
+Holder Analysis
+
+  ↓
+
+Security Scanner
+
+  ↓
+
+Smart Money Tracker
+
+  ↓
+
+Blunder AI Rating
+
+
+## 🌐 Future Integrations
+
+Planned integrations:
+
+- Solana RPC
+- Helius API
+- Birdeye API
+- Jupiter API
+- Telegram Alert Bot
+- AI Trading Assistant
+
+
+## 🎯 Vision
+
+The goal of Blunder Radar AI is to build an intelligent research assistant that helps Web3 users understand token fundamentals, market activity, and blockchain signals in one place.
+
+
+## 📊 Core Architecture
+
+
 AI-powered Solana intelligence platform for memecoin research, token risk analysis, smart money tracking, and Web3 analytics.
 
 ![Blunder Radar AI](https://img.shields.io/badge/Web3-Solana-purple)
