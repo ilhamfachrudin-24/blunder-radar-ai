@@ -3,15 +3,16 @@
 import { useState } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 import Loading from "@/components/Loading";
+import { calculateRiskScore } from "@/lib/riskEngine";
+import { calculateBlunderScore } from "@/lib/blunderScore";
 
 
 export default function TokenScanner() {
 
 
   const {
-
+    analysis,
     setAnalysis
-
   } = useAnalysis();
 
 
@@ -23,6 +24,7 @@ export default function TokenScanner() {
   const [error, setError] = useState("");
 
   const [result, setResult] = useState<any>(null);
+
 
 
 
@@ -40,12 +42,15 @@ export default function TokenScanner() {
 
 
 
+
     try {
 
 
       setLoading(true);
 
       setError("");
+
+
 
 
 
@@ -61,18 +66,20 @@ export default function TokenScanner() {
 
 
 
+
+
       if (!data.pairs || data.pairs.length === 0) {
 
 
         setError("Token data not found");
 
 
-        setLoading(false);
-
-
         return;
 
+
       }
+
+
 
 
 
@@ -81,15 +88,108 @@ export default function TokenScanner() {
 
 
 
+
+
+      const risk = calculateRiskScore(data);
+
+
+
+
+
+      const security = {
+
+
+        securityScore: 50,
+
+        mintAuthority: "Unknown",
+
+        freezeAuthority: "Unknown"
+
+
+      };
+
+
+
+
+
+
+      const smartMoneyScore =
+
+        analysis?.wallet?.smartMoneyScore || 50;
+
+
+
+
+
+
+      const holderScore = 50;
+
+
+
+
+
+
+      const blunder = calculateBlunderScore({
+
+
+        riskScore: risk.score,
+
+
+        securityScore: security.securityScore,
+
+
+        holderScore,
+
+
+        smartMoneyScore
+
+
+      });
+
+
+
+
+
+
+
       const analysisData = {
 
 
         market,
 
-        tokenAddress: token
+
+        tokenAddress: token,
+
+
+        risk,
+
+
+        security,
+
+
+        holders: {
+
+
+          holderScore
+
+        },
+
+
+        wallet: {
+
+
+          smartMoneyScore
+
+        },
+
+
+        finalRating: blunder
 
 
       };
+
+
+
 
 
 
@@ -101,7 +201,10 @@ export default function TokenScanner() {
 
 
 
+
+
     }
+
 
     catch(error){
 
@@ -110,6 +213,8 @@ export default function TokenScanner() {
 
 
     }
+
+
 
 
     finally {
@@ -127,6 +232,8 @@ export default function TokenScanner() {
 
 
 
+
+
   return (
 
 
@@ -138,6 +245,7 @@ export default function TokenScanner() {
         🔍 Token Scanner
 
       </h2>
+
 
 
 
@@ -163,6 +271,7 @@ export default function TokenScanner() {
 
 
 
+
       <button
 
 
@@ -182,7 +291,9 @@ export default function TokenScanner() {
 
 
 
+
       {loading && <Loading />}
+
 
 
 
@@ -217,11 +328,13 @@ export default function TokenScanner() {
 
 
 
+
+
           <p>
 
-            Pair:
+            Token:
 
-            <span className="text-gray-400 ml-2">
+            <span className="ml-2 text-gray-400">
 
               {result.baseToken?.name}
 
@@ -232,11 +345,12 @@ export default function TokenScanner() {
 
 
 
+
           <p>
 
             Price:
 
-            <span className="text-gray-400 ml-2">
+            <span className="ml-2 text-gray-400">
 
               ${result.priceUsd}
 
@@ -247,11 +361,12 @@ export default function TokenScanner() {
 
 
 
+
           <p>
 
             Liquidity:
 
-            <span className="text-gray-400 ml-2">
+            <span className="ml-2 text-gray-400">
 
               ${result.liquidity?.usd}
 
@@ -261,10 +376,14 @@ export default function TokenScanner() {
 
 
 
+
+
         </div>
 
 
       )}
+
+
 
 
 
