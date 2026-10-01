@@ -1,28 +1,52 @@
-export function rankWallets(wallets:any[]){
+export function rankWallets(wallets:any[]) {
 
-  if(!wallets || wallets.length===0){
+
+  if(!wallets || wallets.length === 0){
 
     return [];
 
   }
 
 
-  return wallets.map((wallet)=>{
+
+  const ranked = wallets.map((wallet)=>{
 
 
     let score = 50;
 
 
+
     const balance =
-      Number(wallet.amount || wallet.balance || 0);
+      Number(wallet.balance || 0);
 
 
-    if(balance > 100){
+
+    const transactions =
+      Number(wallet.transactions || 0);
+
+
+
+
+    if(balance >=100){
 
       score +=25;
 
     }
-    else if(balance > 20){
+    else if(balance >=20){
+
+      score +=10;
+
+    }
+
+
+
+
+    if(transactions >=20){
+
+      score +=25;
+
+    }
+    else if(transactions >=5){
 
       score +=10;
 
@@ -38,50 +62,67 @@ export function rankWallets(wallets:any[]){
 
 
 
+
     let label =
       "Normal Wallet";
 
 
-    if(score>=80){
 
-      label="🔥 Smart Money";
+    if(score >=80){
 
-    }
-    else if(score>=60){
-
-      label="👀 Active Trader";
+      label =
+      "🔥 Smart Money";
 
     }
+
+    else if(score >=60){
+
+      label =
+      "👀 Active Trader";
+
+    }
+
 
 
 
     return {
 
-
       wallet:
-        wallet.address,
+      wallet.address,
 
 
       balance,
 
 
+      transactions,
+
+
       score,
 
 
-      label,
-
-
       smartMoneyScore:
-        score
+      score,
+
+
+      label
 
 
     };
 
 
-  })
-  .sort(
+  });
+
+
+
+
+
+  return ranked.sort(
+
     (a,b)=>
+
     b.score-a.score
+
   );
+
 
 }
