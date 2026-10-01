@@ -23,23 +23,20 @@ export function calculateTokenRanking(
 
 
 
-  const ranked =
 
-    tokens.map((token)=>{
+  const ranked = tokens.map((token)=>{
 
 
 
-      const risk =
 
-        calculateRiskScore({
 
-          pairs:[
-            token
+    const risk =
 
-          ]
+      calculateRiskScore({
 
-        });
+        pairs:[token]
 
+      });
 
 
 
@@ -47,42 +44,46 @@ export function calculateTokenRanking(
 
 
 
-      const smartMoneyScore = 50;
 
 
+    const liquidity =
 
-      const holderScore = 50;
+      Number(
+        token.liquidity?.usd || 0
+      );
 
 
 
-      const securityScore = 50;
 
+    const volume =
 
+      Number(
+        token.volume?.h24 || 0
+      );
 
 
 
 
 
 
-      const blunder =
 
-        calculateBlunderScore({
+    let holderScore = 50;
 
 
-          riskScore:
-          risk.score,
 
+    if(liquidity > 50000){
 
-          securityScore,
+      holderScore += 15;
 
+    }
 
-          holderScore,
 
+    if(volume > 100000){
 
-          smartMoneyScore
+      holderScore += 15;
 
+    }
 
-        });
 
 
 
@@ -91,98 +92,285 @@ export function calculateTokenRanking(
 
 
 
-      return {
+    let smartMoneyScore = 50;
 
 
 
-        name:
+    if(
 
-          token.baseToken?.name ||
+      token.txns?.h24?.buys >
 
-          "Unknown",
+      token.txns?.h24?.sells
 
+    ){
 
+      smartMoneyScore += 20;
 
+    }
 
 
-        symbol:
 
-          token.baseToken?.symbol ||
 
-          "",
 
 
+    if(volume > liquidity){
 
+      smartMoneyScore += 15;
 
+    }
 
-        address:
 
-          token.baseToken?.address,
 
 
 
 
 
 
-        price:
 
-          token.priceUsd,
+    let securityScore = 50;
 
 
 
 
 
+    if(liquidity > 10000){
 
-        liquidity:
+      securityScore += 20;
 
-          Number(
-            token.liquidity?.usd || 0
-          ),
+    }
 
 
 
 
 
-        volume:
+    if(token.dexId){
 
-          Number(
-            token.volume?.h24 || 0
-          ),
+      securityScore += 10;
 
+    }
 
 
+
+
+
+
+
+
+
+    if(holderScore > 100){
+
+      holderScore = 100;
+
+    }
+
+
+
+    if(smartMoneyScore > 100){
+
+      smartMoneyScore = 100;
+
+    }
+
+
+
+    if(securityScore > 100){
+
+      securityScore = 100;
+
+    }
+
+
+
+
+
+
+
+
+
+    const blunder =
+
+      calculateBlunderScore({
 
 
 
         riskScore:
 
-          risk.score,
+        risk.score,
+
+
+
+        securityScore,
+
+
+
+        holderScore,
+
+
+
+        smartMoneyScore
+
+
+
+      });
 
 
 
 
 
 
-        blunderScore:
-
-          blunder.score,
 
 
 
+    return {
 
 
 
-        status:
 
-          blunder.status
+      name:
 
+        token.baseToken?.name ||
 
-
-      };
-
+        "Unknown",
 
 
-    });
+
+
+
+
+      symbol:
+
+        token.baseToken?.symbol ||
+
+        "",
+
+
+
+
+
+
+      address:
+
+        token.baseToken?.address,
+
+
+
+
+
+
+
+
+      price:
+
+        token.priceUsd,
+
+
+
+
+
+
+
+
+      liquidity,
+
+
+
+
+
+
+
+
+      volume,
+
+
+
+
+
+
+
+
+      buys:
+
+        token.txns?.h24?.buy || 0,
+
+
+
+
+
+
+
+      sells:
+
+        token.txns?.h24?.sell || 0,
+
+
+
+
+
+
+
+
+      riskScore:
+
+        risk.score,
+
+
+
+
+
+
+
+
+      holderScore,
+
+
+
+
+
+
+
+
+      smartMoneyScore,
+
+
+
+
+
+
+
+
+      securityScore,
+
+
+
+
+
+
+
+
+      blunderScore:
+
+        blunder.score,
+
+
+
+
+
+
+
+
+      status:
+
+        blunder.status
+
+
+
+    };
+
+
+
+  });
+
+
 
 
 
