@@ -8,6 +8,7 @@ import { calculateRiskScore } from "@/lib/riskEngine";
 import { calculateBlunderScore } from "@/lib/blunderScore";
 import { calculateHolderScore } from "@/lib/holderAnalysis";
 import { checkSolanaSecurity } from "@/lib/solanaSecurity";
+import { getTokenHolders } from "@/lib/holderWallets";
 
 
 
@@ -21,13 +22,25 @@ export default function TokenScanner(){
 
 
 
-  const [token,setToken]=useState("");
+  const [token,setToken] =
+    useState("");
 
-  const [loading,setLoading]=useState(false);
 
-  const [error,setError]=useState("");
 
-  const [result,setResult]=useState<any>(null);
+  const [loading,setLoading] =
+    useState(false);
+
+
+
+  const [error,setError] =
+    useState("");
+
+
+
+  const [result,setResult] =
+    useState<any>(null);
+
+
 
 
 
@@ -38,15 +51,22 @@ export default function TokenScanner(){
   async function analyzeToken(){
 
 
+
     if(!token){
+
 
       setError(
         "Please enter token address"
       );
 
+
       return;
 
+
     }
+
+
+
 
 
 
@@ -61,7 +81,13 @@ export default function TokenScanner(){
 
 
 
+
+
+
+      // Dexscreener Market Data
+
       const response =
+
         await fetch(
 
           `https://api.dexscreener.com/latest/dex/tokens/${token}`
@@ -71,22 +97,36 @@ export default function TokenScanner(){
 
 
 
+
+
       const data =
+
         await response.json();
 
 
 
 
+
+
+
       if(
+
         !data.pairs ||
-        data.pairs.length===0
+
+        data.pairs.length === 0
+
       ){
 
+
         setError(
+
           "Token data not found"
+
         );
 
+
         return;
+
 
       }
 
@@ -94,7 +134,11 @@ export default function TokenScanner(){
 
 
 
+
+
+
       const market =
+
         data.pairs[0];
 
 
@@ -102,7 +146,12 @@ export default function TokenScanner(){
 
 
 
+
+
+      // Risk Analysis
+
       const risk =
+
         calculateRiskScore(data);
 
 
@@ -110,7 +159,13 @@ export default function TokenScanner(){
 
 
 
+
+
+
+      // Solana Security
+
       const security =
+
         await checkSolanaSecurity(token);
 
 
@@ -118,11 +173,41 @@ export default function TokenScanner(){
 
 
 
+
+
+
+      // Real Holder Scanner
+
+      const holderWallets =
+
+        await getTokenHolders(token);
+
+
+
+
+
+
+
+
+
+      // Holder Intelligence
+
       const holder =
+
         calculateHolderScore({
 
+
           holders:
-          market?.holders || 0
+
+          holderWallets.length,
+
+
+
+          wallets:
+
+          holderWallets
+
+
 
         });
 
@@ -132,6 +217,10 @@ export default function TokenScanner(){
 
 
 
+
+
+      // Smart Money Placeholder
+
       const wallet = {
 
 
@@ -139,7 +228,9 @@ export default function TokenScanner(){
 
 
         smartMoneyStatus:
+
         "Waiting wallet analysis"
+
 
 
       };
@@ -150,28 +241,43 @@ export default function TokenScanner(){
 
 
 
+
+
+      // Final AI Score
+
       const blunder =
 
         calculateBlunderScore({
 
 
+
           riskScore:
+
           risk.score,
 
 
+
           securityScore:
+
           security.securityScore,
 
 
+
           holderScore:
+
           holder.holderScore,
 
 
+
           smartMoneyScore:
+
           wallet.smartMoneyScore
 
 
+
         });
+
+
 
 
 
@@ -197,10 +303,17 @@ export default function TokenScanner(){
         holders:holder,
 
 
+
+        holderWallets,
+
+
+
         wallet,
 
 
+
         finalRating:blunder
+
 
 
       };
@@ -210,7 +323,10 @@ export default function TokenScanner(){
 
 
 
+
+
       setResult(market);
+
 
 
       setAnalysis(analysisData);
@@ -218,18 +334,32 @@ export default function TokenScanner(){
 
 
 
-    }
 
+
+
+    }
 
     catch(error){
 
 
+      console.log(error);
+
+
+
       setError(
+
         "Failed to analyze token"
+
       );
 
 
+
     }
+
+
+
+
+
 
 
     finally{
@@ -241,7 +371,12 @@ export default function TokenScanner(){
     }
 
 
+
   }
+
+
+
+
 
 
 
@@ -252,7 +387,12 @@ export default function TokenScanner(){
 
   return (
 
+
+
     <div className="card mt-6">
+
+
+
 
 
       <h2 className="text-2xl font-bold">
@@ -265,17 +405,30 @@ export default function TokenScanner(){
 
 
 
+
+
       <input
+
 
         value={token}
 
+
+
         onChange={(e)=>
+
           setToken(e.target.value)
+
         }
+
+
 
         placeholder="Enter Solana token address"
 
+
+
         className="mt-5 w-full rounded-xl bg-black/40 border border-white/20 px-4 py-3"
+
+
 
       />
 
@@ -284,15 +437,24 @@ export default function TokenScanner(){
 
 
 
+
+
       <button
+
 
         onClick={analyzeToken}
 
+
+
         className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold"
+
+
 
       >
 
+
         Analyze Token
+
 
       </button>
 
@@ -300,9 +462,16 @@ export default function TokenScanner(){
 
 
 
+
+
+
       {loading &&
+
         <Loading />
+
       }
+
+
 
 
 
@@ -311,11 +480,13 @@ export default function TokenScanner(){
 
       {error &&
 
+
         <p className="mt-5 text-red-400">
 
           {error}
 
         </p>
+
 
       }
 
@@ -324,9 +495,16 @@ export default function TokenScanner(){
 
 
 
+
+
       {result &&
 
+
+
       <div className="mt-8 space-y-3">
+
+
+
 
 
         <h3 className="text-xl font-bold">
@@ -337,56 +515,141 @@ export default function TokenScanner(){
 
 
 
+
+
+
+
         <p>
+
 
           Token:
 
+
           <span className="ml-2 text-gray-400">
+
 
             {result.baseToken?.name}
 
+
           </span>
+
 
         </p>
 
 
 
 
+
+
+
+
         <p>
+
+
+          Symbol:
+
+
+          <span className="ml-2 text-gray-400">
+
+
+            {result.baseToken?.symbol}
+
+
+          </span>
+
+
+        </p>
+
+
+
+
+
+
+
+
+        <p>
+
 
           Price:
 
+
           <span className="ml-2 text-gray-400">
+
 
             ${result.priceUsd}
 
+
           </span>
 
+
         </p>
+
+
+
+
 
 
 
 
         <p>
 
+
           Liquidity:
+
 
           <span className="ml-2 text-gray-400">
 
+
             ${result.liquidity?.usd}
+
 
           </span>
 
+
         </p>
+
+
+
+
+
+
+
+
+        <p>
+
+
+          Volume 24h:
+
+
+          <span className="ml-2 text-gray-400">
+
+
+            ${result.volume?.h24}
+
+
+          </span>
+
+
+        </p>
+
+
+
+
 
 
       </div>
 
+
       }
+
+
+
 
 
     </div>
 
+
   );
+
 
 }
