@@ -6,6 +6,7 @@ import RiskScore from "@/components/RiskScore";
 import WhaleTracker from "@/components/WhaleTracker";
 import SecurityScanner from "@/components/SecurityScanner";
 import AIAssistant from "@/components/AIAssistant";
+import AIReport from "@/components/AIReport";
 import BlunderRating from "@/components/BlunderRating";
 import Navbar from "@/components/Navbar";
 import About from "@/components/About";
@@ -110,6 +111,7 @@ export default function Home() {
 
 
 
+
       {/* TOKEN INTELLIGENCE */}
 
 
@@ -132,31 +134,8 @@ export default function Home() {
 
 
 
-
-        <div className="card mt-10">
-
-
-          <h2 className="text-2xl font-bold">
-
-            Token Intelligence Engine
-
-          </h2>
-
-
-
-          <p className="mt-4 text-gray-300">
-
-            Blunder Radar AI analyzes token liquidity,
-            trading activity, holder distribution,
-            wallet behavior, and market signals.
-
-          </p>
-
-
-        </div>
-
-
       </section>
+
 
 
 
@@ -224,6 +203,10 @@ export default function Home() {
           🤖 AI Analysis
 
         </h2>
+
+
+
+        <AIReport />
 
 
 
