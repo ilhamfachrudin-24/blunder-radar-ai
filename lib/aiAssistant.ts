@@ -1,50 +1,220 @@
-export function generateAIInsight(data: any) {
+export function generateAIInsight(
+  data:any
+){
 
-  const pair = data?.pairs?.[0];
 
 
-  if (!pair) {
+  if(!data){
+
+
     return {
+
+
       message:
-        "No token data available. Please analyze a valid token."
+      "No analysis data available."
+
     };
+
+
   }
 
 
-  const liquidity =
-    Number(pair.liquidity?.usd || 0);
 
 
-  const volume =
-    Number(pair.volume?.h24 || 0);
+
+
+
+  const risk =
+
+    data?.risk?.score || 50;
+
+
+
+  const security =
+
+    data?.security?.securityScore || 50;
+
+
+
+  const holder =
+
+    data?.holders?.holderScore || 50;
+
+
+
+  const smartMoney =
+
+    data?.wallet?.smartMoneyScore ||
+
+    data?.smartMoneyScore ||
+
+    50;
+
+
+
+
+
+  const finalScore =
+
+    data?.finalRating?.score ||
+
+    50;
+
+
+
+
+
 
 
 
   let message = "";
 
 
-  if (liquidity > 100000 && volume > 50000) {
+
+
+
+
+
+  if(finalScore >=80){
+
+
 
     message =
-      "Token shows healthy liquidity and active trading volume. Market activity looks positive, but always perform additional research.";
 
-  } 
-  else if (liquidity > 10000) {
+`🔥 Strong Signal Detected
 
-    message =
-      "Token has moderate liquidity. Consider checking holder distribution and security risks before trading.";
+Blunder AI Rating:
+${finalScore}/100
 
-  } 
-  else {
+Risk:
+${risk}/100
 
-    message =
-      "Low liquidity detected. Higher volatility and risk may occur.";
+Security:
+${security}/100
+
+Holder Distribution:
+${holder}/100
+
+Smart Money:
+${smartMoney}/100
+
+
+AI Insight:
+
+Token shows strong indicators based on liquidity, security, holder structure, and smart money activity. Always verify market conditions before entering.`;
+
+
 
   }
 
 
+
+  else if(finalScore >=60){
+
+
+
+    message =
+
+`⚠️ Moderate Signal
+
+Blunder AI Rating:
+${finalScore}/100
+
+
+Risk:
+${risk}/100
+
+Security:
+${security}/100
+
+Holder:
+${holder}/100
+
+Smart Money:
+${smartMoney}/100
+
+
+AI Insight:
+
+Token has some positive indicators but requires monitoring before making a decision.`;
+
+
+
+  }
+
+
+
+  else {
+
+
+
+    message =
+
+`🚨 High Risk Detection
+
+
+Blunder AI Rating:
+${finalScore}/100
+
+
+Risk:
+${risk}/100
+
+Security:
+${security}/100
+
+Holder:
+${holder}/100
+
+Smart Money:
+${smartMoney}/100
+
+
+AI Insight:
+
+Current data shows elevated risk. Low confidence signal detected. Perform deeper research.`;
+
+
+
+  }
+
+
+
+
+
+
+
+
   return {
-    message
+
+
+    message,
+
+
+    score:finalScore,
+
+
+    factors:{
+
+
+      risk,
+
+
+      security,
+
+
+      holder,
+
+
+      smartMoney
+
+
+    }
+
+
+
   };
+
+
 
 }
