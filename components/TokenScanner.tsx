@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { calculateRiskScore } from "@/lib/riskEngine";
+import { useAnalysis } from "@/context/AnalysisContext";
 
 export default function TokenScanner() {
 
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(""); const { setAnalysis } = useAnalysis();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
@@ -24,7 +25,9 @@ export default function TokenScanner() {
       );
 
 
-      const result = await response.json();
+      const result = await response.json(); setAnalysis({
+  market: result,
+});
 
 
       setData(result);
