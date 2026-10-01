@@ -2,21 +2,30 @@ const RPC_URL =
   "https://api.mainnet-beta.solana.com";
 
 
+
 export async function getWalletData(
   wallet: string
 ) {
 
+
   try {
+
 
     const balanceResponse =
       await fetch(
+
         RPC_URL,
+
         {
+
           method: "POST",
 
           headers: {
+
             "Content-Type": "application/json",
+
           },
+
 
           body: JSON.stringify({
 
@@ -27,13 +36,19 @@ export async function getWalletData(
             method: "getBalance",
 
             params: [
+
               wallet
+
             ]
 
           })
 
         }
+
       );
+
+
+
 
 
     const balance =
@@ -41,15 +56,24 @@ export async function getWalletData(
 
 
 
+
+
+
     const transactionResponse =
       await fetch(
+
         RPC_URL,
+
         {
+
           method: "POST",
 
           headers: {
+
             "Content-Type": "application/json",
+
           },
+
 
           body: JSON.stringify({
 
@@ -60,16 +84,27 @@ export async function getWalletData(
             method: "getSignaturesForAddress",
 
             params: [
+
               wallet,
+
               {
+
                 limit: 10
+
               }
+
             ]
 
           })
 
         }
+
       );
+
+
+
+
+
 
 
     const transactions =
@@ -77,49 +112,136 @@ export async function getWalletData(
 
 
 
+
+
+
+    const walletBalance =
+
+      balance?.result?.value / 1000000000 || 0;
+
+
+
+
+
+
+    const transactionCount =
+
+      transactions?.result?.length || 0;
+
+
+
+
+
+
+
+    let smartMoneyScore = 50;
+
+
+    if (walletBalance > 100) {
+
+      smartMoneyScore += 20;
+
+    }
+
+
+    if (transactionCount > 5) {
+
+      smartMoneyScore += 20;
+
+    }
+
+
+
+    if (smartMoneyScore > 100) {
+
+      smartMoneyScore = 100;
+
+    }
+
+
+
+
+
+    let smartMoneyStatus =
+      "Normal Wallet";
+
+
+
+    if (smartMoneyScore >= 80) {
+
+      smartMoneyStatus =
+        "Potential Smart Money";
+
+    }
+
+    else if (smartMoneyScore >= 60) {
+
+      smartMoneyStatus =
+        "Active Wallet";
+
+    }
+
+
+
+
+
+
+
     return {
+
 
       wallet,
 
-      balance:
-        balance?.result?.value / 1000000000 || 0,
+
+      balance: walletBalance,
 
 
-      transactions:
-        transactions?.result?.length || 0,
+      transactions: transactionCount,
 
 
-      const smartMoney =
-  calculateSmartMoneyScore({
+      smartMoneyScore,
 
-    balance:
-      balance?.result?.value / 1000000000 || 0,
 
-    transactions:
-      transactions?.result?.length || 0
+      smartMoneyStatus
 
-});
 
     };
+
+
+
 
 
   } catch(error) {
 
 
-    return {smartMoneyScore:
-smartMoney.score,
 
-smartMoneyStatus:
-smartMoney.status
+    return {
+
 
       wallet,
 
+
+      balance: 0,
+
+
+      transactions: 0,
+
+
+      smartMoneyScore: 0,
+
+
+      smartMoneyStatus:
+        "Analysis Failed",
+
+
       error:
         "Failed to fetch wallet data"
+
 
     };
 
 
   }
+
 
 }
