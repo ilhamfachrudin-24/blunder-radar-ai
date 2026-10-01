@@ -19,3 +19,12 @@ export default function RootLayout({
     </html>
   );
 }
+
+export const metadata = {
+  title: "Blunder Radar AI",
+  description:
+    "AI-powered Solana memecoin analysis platform.",
+  icons: {
+    icon: "/logo.svg",
+  },
+};
