@@ -153,7 +153,7 @@ public/
 Clone repository:
 
 ```bash
-git clone YOUR_REPOSITORY_URL
+git clone https://github.com/ilhamfachrudin-24/blunder-radar-ai.git
 
 Install dependencies:
 npm install
