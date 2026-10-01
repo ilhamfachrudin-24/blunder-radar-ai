@@ -89,8 +89,16 @@ export async function getWalletData(
         transactions?.result?.length || 0,
 
 
-      smartMoneyScore:
-        70
+      const smartMoney =
+  calculateSmartMoneyScore({
+
+    balance:
+      balance?.result?.value / 1000000000 || 0,
+
+    transactions:
+      transactions?.result?.length || 0
+
+});
 
     };
 
@@ -98,7 +106,11 @@ export async function getWalletData(
   } catch(error) {
 
 
-    return {
+    return {smartMoneyScore:
+smartMoney.score,
+
+smartMoneyStatus:
+smartMoney.status
 
       wallet,
 
