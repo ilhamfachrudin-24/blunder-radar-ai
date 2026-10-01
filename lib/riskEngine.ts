@@ -1,64 +1,319 @@
-export function calculateRiskScore(data: any) {
+export function calculateRiskScore(data:any){
+
 
   let score = 50;
 
 
-  const pair = data?.pairs?.[0];
+
+  const pair =
+    data?.pairs?.[0];
 
 
-  if (!pair) {
+
+  if(!pair){
+
+
     return {
-      score: 0,
-      level: "Unknown",
+
+      score:0,
+
+      level:"Unknown"
+
     };
+
+
   }
+
+
+
+
 
 
   const liquidity =
-    Number(pair.liquidity?.usd || 0);
+
+    Number(
+      pair.liquidity?.usd || 0
+    );
+
+
+
 
 
   const volume =
-    Number(pair.volume?.h24 || 0);
+
+    Number(
+      pair.volume?.h24 || 0
+    );
 
 
 
-  if (liquidity > 100000) {
-    score += 20;
+
+
+  const marketCap =
+
+    Number(
+      pair.fdv || pair.marketCap || 0
+    );
+
+
+
+
+
+
+
+
+  const txns =
+
+    pair.txns?.h24 || {};
+
+
+
+
+
+
+  const buys =
+
+    Number(txns.buys || 0);
+
+
+
+
+
+  const sells =
+
+    Number(txns.sells || 0);
+
+
+
+
+
+
+
+
+  // Liquidity analysis
+
+
+  if(liquidity >= 100000){
+
+
+    score +=20;
+
+
   }
 
 
-  if (volume > 50000) {
-    score += 15;
+  else if(liquidity >=10000){
+
+
+    score +=10;
+
+
   }
 
 
-  if (pair.dexId) {
-    score += 5;
+  else if(liquidity <1000){
+
+
+    score -=20;
+
+
   }
 
 
-  if (score > 100) {
-    score = 100;
+
+
+
+
+
+
+  // Volume analysis
+
+
+  if(volume >=50000){
+
+
+    score +=15;
+
+
+  }
+
+
+  else if(volume >=10000){
+
+
+    score +=5;
+
+
   }
 
 
 
-  let level = "High Risk";
 
 
-  if (score >= 80) {
-    level = "Lower Risk";
-  } 
-  else if (score >= 60) {
-    level = "Medium Risk";
+
+
+
+  // Trading activity
+
+
+  if(buys > sells){
+
+
+    score +=10;
+
+
   }
+
+
+  else if(sells > buys){
+
+
+    score -=10;
+
+
+  }
+
+
+
+
+
+
+
+
+  // Market presence
+
+
+  if(marketCap > 1000000){
+
+
+    score +=5;
+
+
+  }
+
+
+
+
+
+
+
+
+  // DEX check
+
+
+  if(pair.dexId){
+
+
+    score +=5;
+
+
+  }
+
+
+
+
+
+
+
+
+  // Limit
+
+
+  if(score >100){
+
+
+    score=100;
+
+
+  }
+
+
+
+
+  if(score <0){
+
+
+    score=0;
+
+
+  }
+
+
+
+
+
+
+
+
+  let level =
+
+    "High Risk";
+
+
+
+
+
+
+
+  if(score >=80){
+
+
+    level =
+
+      "Lower Risk";
+
+
+  }
+
+
+  else if(score >=60){
+
+
+    level =
+
+      "Medium Risk";
+
+
+  }
+
+
+
+
+
 
 
 
   return {
+
+
     score,
+
+
     level,
+
+
+    metrics:{
+
+
+      liquidity,
+
+
+      volume,
+
+
+      marketCap,
+
+
+      buys,
+
+
+      sells
+
+
+    }
+
+
   };
+
 
 }
