@@ -5,7 +5,9 @@ import {
 
 
 const TOKEN_PROGRAM_ID =
-  "TokenkegQfeZyiNwAJbNbGKPFXCWvBvf9Ss623VQ5DA";
+"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+
+
 
 
 
@@ -20,6 +22,7 @@ export async function getTokenHolders(
 
 
 
+
     const data =
 
       await solanaRequest(
@@ -28,16 +31,20 @@ export async function getTokenHolders(
 
         [
 
+
           TOKEN_PROGRAM_ID,
 
 
           {
 
+
             encoding:
             "jsonParsed",
 
 
+
             filters:[
+
 
 
               {
@@ -48,7 +55,9 @@ export async function getTokenHolders(
               },
 
 
+
               {
+
 
                 memcmp:{
 
@@ -68,6 +77,7 @@ export async function getTokenHolders(
 
             ]
 
+
           }
 
 
@@ -81,12 +91,22 @@ export async function getTokenHolders(
 
 
 
-    const holders =
 
 
-      data?.result
+    const walletMap:any = {};
 
-      ?.map((item:any)=>{
+
+
+
+
+
+
+
+
+    data?.result?.forEach(
+
+      (item:any)=>{
+
 
 
         const info =
@@ -98,49 +118,210 @@ export async function getTokenHolders(
 
 
 
-        return {
 
 
-          address:
+        const owner =
 
-            info?.owner,
-
-
-
-          tokenAccount:
-
-            item.pubkey,
+          info?.owner;
 
 
 
-          amount:
+
+
+        const amount =
+
+          Number(
+
+            info
+            ?.tokenAmount
+            ?.uiAmount || 0
+
+          );
+
+
+
+
+
+
+        if(
+
+          owner &&
+
+          amount > 0
+
+        ){
+
+
+
+          if(!walletMap[owner]){
+
+
+            walletMap[owner] = {
+
+
+              address:owner,
+
+
+              amount:0,
+
+
+              tokenAccounts:0
+
+
+            };
+
+
+          }
+
+
+
+
+
+          walletMap[owner].amount += amount;
+
+
+          walletMap[owner].tokenAccounts +=1;
+
+
+
+        }
+
+
+
+
+      }
+
+
+    );
+
+
+
+
+
+
+
+
+
+    const holders =
+
+      Object.values(walletMap);
+
+
+
+
+
+
+
+
+
+    const sorted =
+
+
+      holders.sort(
+
+        (a:any,b:any)=>
+
+          b.amount -
+
+          a.amount
+
+      );
+
+
+
+
+
+
+
+
+
+    const totalSupply =
+
+
+      sorted.reduce(
+
+        (sum:any,wallet:any)=>
+
+          sum + wallet.amount,
+
+
+        0
+
+      );
+
+
+
+
+
+
+
+
+
+    const analyzed =
+
+
+      sorted.map(
+
+        (wallet:any,index:number)=>{
+
+
+
+
+
+          const percentage =
+
+            totalSupply > 0
+
+            ?
+
+            (
+
+              wallet.amount /
+
+              totalSupply
+
+            ) * 100
+
+
+            :
+
+            0;
+
+
+
+
+
+
+
+          return {
+
+
+            ...wallet,
+
+
+            rank:index + 1,
+
+
+            percentage:
+
 
             Number(
 
-              info?.tokenAmount
-              ?.uiAmount || 0
+              percentage.toFixed(2)
 
             )
 
 
 
-        };
+          };
 
 
 
-      })
+
+        }
 
 
-
-      ?.filter(
-
-        (wallet:any)=>
-
-          wallet.amount > 0
-
-      )
-
-      || [];
+      );
 
 
 
@@ -148,7 +329,9 @@ export async function getTokenHolders(
 
 
 
-    return holders;
+
+
+    return analyzed;
 
 
 
@@ -160,13 +343,19 @@ export async function getTokenHolders(
   catch(error){
 
 
+
     console.log(
+
       "Holder fetch error:",
+
       error
+
     );
 
 
+
     return [];
+
 
 
   }
