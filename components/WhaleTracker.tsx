@@ -10,8 +10,10 @@ export default function WhaleTracker() {
 
 
   const {
-    analysis
+    analysis,
+    setAnalysis
   } = useAnalysis();
+
 
 
 
@@ -27,9 +29,17 @@ export default function WhaleTracker() {
 
 
 
+  const [error,setError] =
+    useState("");
+
+
+
+
+
+
+
 
   async function scanWhales(){
-
 
 
     const tokenAddress =
@@ -37,7 +47,16 @@ export default function WhaleTracker() {
 
 
 
-    if(!tokenAddress) return;
+    if(!tokenAddress){
+
+      setError(
+        "Analyze token first"
+      );
+
+      return;
+
+    }
+
 
 
 
@@ -47,6 +66,9 @@ export default function WhaleTracker() {
 
 
       setLoading(true);
+
+      setError("");
+
 
 
 
@@ -58,6 +80,7 @@ export default function WhaleTracker() {
           tokenAddress
 
         );
+
 
 
 
@@ -77,7 +100,58 @@ export default function WhaleTracker() {
 
 
 
+
       setWallets(ranked);
+
+
+
+
+
+
+
+      if(ranked.length > 0){
+
+
+        const topWallet =
+          ranked[0];
+
+
+
+        setAnalysis({
+
+          ...analysis,
+
+
+          wallet:{
+
+
+            smartMoneyScore:
+
+              topWallet.smartMoneyScore,
+
+
+
+            smartMoneyStatus:
+
+              topWallet.label,
+
+
+
+            topWallet:
+
+              topWallet.wallet
+
+
+
+          }
+
+
+
+        });
+
+
+      }
+
 
 
 
@@ -85,7 +159,21 @@ export default function WhaleTracker() {
 
     }
 
-    finally {
+    catch(error){
+
+
+      setError(
+
+        "Failed to scan smart money"
+
+      );
+
+
+    }
+
+
+
+    finally{
 
 
       setLoading(false);
@@ -102,10 +190,13 @@ export default function WhaleTracker() {
 
 
 
+
+
   return (
 
 
     <div className="card mt-10">
+
 
 
       <h2 className="text-2xl font-bold">
@@ -120,9 +211,10 @@ export default function WhaleTracker() {
 
       <p className="mt-3 text-gray-400">
 
-        Detect whale holders and smart money wallets automatically.
+        Detect whale holders and analyze potential smart money wallets.
 
       </p>
+
 
 
 
@@ -147,8 +239,9 @@ export default function WhaleTracker() {
 
 
 
-      {analysis?.tokenAddress && (
 
+
+      {analysis?.tokenAddress && (
 
 
         <button
@@ -167,14 +260,37 @@ export default function WhaleTracker() {
 
           ? "Scanning..."
 
-          : "Scan Smart Money"}
+          :
+
+          "Scan Smart Money"
+
+          }
 
 
         </button>
 
 
+      )}
+
+
+
+
+
+
+
+      {error && (
+
+
+        <p className="mt-5 text-red-400">
+
+          {error}
+
+        </p>
+
 
       )}
+
+
 
 
 
@@ -187,19 +303,22 @@ export default function WhaleTracker() {
 
 
 
-        {wallets.slice(0,10).map(
-
-          (wallet,index)=>(
+        {wallets
+        .slice(0,10)
+        .map((wallet,index)=>(
 
 
 
           <div
 
-          key={index}
+            key={index}
 
-          className="border border-white/10 rounded-xl p-5"
+            className="border border-white/10 rounded-xl p-5"
+
 
           >
+
+
 
 
 
@@ -211,7 +330,11 @@ export default function WhaleTracker() {
 
               {wallet.label}
 
+
             </h3>
+
+
+
 
 
 
@@ -221,22 +344,9 @@ export default function WhaleTracker() {
 
               Wallet:
 
-              {wallet.wallet}
+              <span className="ml-2">
 
-            </p>
-
-
-
-
-
-
-            <p>
-
-              Amount:
-
-              <span className="ml-2 text-green-400">
-
-                {wallet.balance}
+                {wallet.wallet}
 
               </span>
 
@@ -247,13 +357,59 @@ export default function WhaleTracker() {
 
 
 
+
+
+            <p>
+
+              Balance:
+
+              <span className="ml-2 text-green-400">
+
+                {wallet.balance} SOL
+
+              </span>
+
+            </p>
+
+
+
+
+
+
+
+
+            <p>
+
+              Transactions:
+
+              <span className="ml-2">
+
+                {wallet.transactions}
+
+              </span>
+
+            </p>
+
+
+
+
+
+
+
+
             <p className="mt-3 text-2xl font-bold gradient-text">
+
 
               Smart Score:
 
-              {wallet.score}/100
+              {" "}
+
+              {wallet.smartMoneyScore}/100
+
 
             </p>
+
+
 
 
 
@@ -266,6 +422,7 @@ export default function WhaleTracker() {
 
 
       </div>
+
 
 
 
