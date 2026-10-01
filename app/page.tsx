@@ -4,6 +4,7 @@ import WhaleTracker from "@/components/WhaleTracker";
 import SecurityScanner from "@/components/SecurityScanner";
 import AIAssistant from "@/components/AIAssistant";
 import BlunderRating from "@/components/BlunderRating";
+import { useAnalysis } from "@/context/AnalysisContext";
 
 export default function Home() {
   return (
