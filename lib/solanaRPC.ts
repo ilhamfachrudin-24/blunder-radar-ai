@@ -1,55 +1,195 @@
-export async function getTokenInfo(address: string) {
+const RPC_URL =
+  "https://api.mainnet-beta.solana.com";
 
-  const RPC_URL =
-    "https://api.mainnet-beta.solana.com";
+
+
+export async function solanaRequest(
+  method:string,
+  params:any[]
+){
 
 
   try {
 
-    const response = await fetch(
-      RPC_URL,
-      {
-        method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response =
 
-        body: JSON.stringify({
+      await fetch(
 
-          jsonrpc: "2.0",
+        RPC_URL,
 
-          id: 1,
+        {
 
-          method: "getAccountInfo",
+          method:"POST",
 
-          params: [
-            address,
-            {
-              encoding: "jsonParsed"
-            }
-          ]
+          headers:{
 
-        })
+            "Content-Type":
+            "application/json"
 
-      }
-    );
+          },
 
 
-    const data = await response.json();
+          body:JSON.stringify({
+
+            jsonrpc:"2.0",
+
+            id:1,
+
+            method,
+
+            params
 
 
-    return data;
+          })
+
+        }
+
+      );
 
 
-  } catch (error) {
+
+
+
+    return await response.json();
+
+
+
+
+  }
+
+  catch(error){
 
 
     return {
-      error: "Failed to fetch Solana data"
+
+      error:
+      "Failed Solana RPC request"
+
+
     };
 
 
   }
+
+
+}
+
+
+
+
+
+
+
+export async function getTokenInfo(
+  address:string
+){
+
+
+  return solanaRequest(
+
+    "getAccountInfo",
+
+    [
+
+      address,
+
+      {
+
+        encoding:
+        "jsonParsed"
+
+      }
+
+    ]
+
+  );
+
+
+}
+
+
+
+
+
+
+
+export async function getWalletBalance(
+  wallet:string
+){
+
+
+  return solanaRequest(
+
+    "getBalance",
+
+    [
+
+      wallet
+
+    ]
+
+  );
+
+
+}
+
+
+
+
+
+
+
+
+export async function getWalletTransactions(
+  wallet:string
+){
+
+
+  return solanaRequest(
+
+    "getSignaturesForAddress",
+
+    [
+
+      wallet,
+
+      {
+
+        limit:20
+
+      }
+
+    ]
+
+  );
+
+
+}
+
+
+
+
+
+
+
+
+export async function getTokenSupply(
+  address:string
+){
+
+
+  return solanaRequest(
+
+    "getTokenSupply",
+
+    [
+
+      address
+
+    ]
+
+  );
+
 
 }
