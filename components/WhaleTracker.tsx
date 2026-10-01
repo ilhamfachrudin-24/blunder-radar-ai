@@ -6,7 +6,9 @@ import { getTokenHolders } from "@/lib/holderWallets";
 import { rankWallets } from "@/lib/walletRanking";
 
 
-export default function WhaleTracker() {
+
+export default function WhaleTracker(){
+
 
 
   const {
@@ -27,11 +29,8 @@ export default function WhaleTracker() {
 
 
 
-
-
   const [error,setError] =
     useState("");
-
 
 
 
@@ -42,16 +41,22 @@ export default function WhaleTracker() {
   async function scanWhales(){
 
 
+
     const tokenAddress =
+
       analysis?.tokenAddress;
+
+
 
 
 
     if(!tokenAddress){
 
+
       setError(
         "Analyze token first"
       );
+
 
       return;
 
@@ -62,12 +67,15 @@ export default function WhaleTracker() {
 
 
 
-    try {
+
+    try{
 
 
       setLoading(true);
 
       setError("");
+
+
 
 
 
@@ -80,6 +88,7 @@ export default function WhaleTracker() {
           tokenAddress
 
         );
+
 
 
 
@@ -109,25 +118,37 @@ export default function WhaleTracker() {
 
 
 
+
+
       if(ranked.length > 0){
 
 
+
         const topWallet =
+
           ranked[0];
 
 
 
-        setAnalysis({
 
-          ...analysis,
+
+
+
+        setAnalysis((prev:any)=>({
+
+
+
+          ...prev,
+
 
 
           wallet:{
 
 
+
             smartMoneyScore:
 
-              topWallet.smartMoneyScore,
+              topWallet.score,
 
 
 
@@ -147,7 +168,8 @@ export default function WhaleTracker() {
 
 
 
-        });
+        }));
+
 
 
       }
@@ -162,6 +184,7 @@ export default function WhaleTracker() {
     catch(error){
 
 
+
       setError(
 
         "Failed to scan smart money"
@@ -169,9 +192,8 @@ export default function WhaleTracker() {
       );
 
 
+
     }
-
-
 
     finally{
 
@@ -180,6 +202,7 @@ export default function WhaleTracker() {
 
 
     }
+
 
 
   }
@@ -195,7 +218,10 @@ export default function WhaleTracker() {
   return (
 
 
+
     <div className="card mt-10">
+
+
 
 
 
@@ -209,11 +235,16 @@ export default function WhaleTracker() {
 
 
 
+
+
+
       <p className="mt-3 text-gray-400">
 
-        Detect whale holders and analyze potential smart money wallets.
+        Detect whale holders and rank potential smart money wallets.
 
       </p>
+
+
 
 
 
@@ -244,6 +275,7 @@ export default function WhaleTracker() {
       {analysis?.tokenAddress && (
 
 
+
         <button
 
 
@@ -256,9 +288,12 @@ export default function WhaleTracker() {
         >
 
 
+
           {loading
 
-          ? "Scanning..."
+          ?
+
+          "Scanning..."
 
           :
 
@@ -267,7 +302,9 @@ export default function WhaleTracker() {
           }
 
 
+
         </button>
+
 
 
       )}
@@ -278,7 +315,10 @@ export default function WhaleTracker() {
 
 
 
+
+
       {error && (
+
 
 
         <p className="mt-5 text-red-400">
@@ -298,14 +338,16 @@ export default function WhaleTracker() {
 
 
 
-
       <div className="mt-8 space-y-5">
+
+
 
 
 
         {wallets
         .slice(0,10)
         .map((wallet,index)=>(
+
 
 
 
@@ -322,7 +364,9 @@ export default function WhaleTracker() {
 
 
 
+
             <h3 className="text-xl font-bold">
+
 
               #{index+1}
 
@@ -340,7 +384,8 @@ export default function WhaleTracker() {
 
 
 
-            <p className="text-gray-400 mt-2">
+
+            <p className="text-gray-400 mt-3">
 
               Wallet:
 
@@ -351,6 +396,7 @@ export default function WhaleTracker() {
               </span>
 
             </p>
+
 
 
 
@@ -378,6 +424,7 @@ export default function WhaleTracker() {
 
 
 
+
             <p>
 
               Transactions:
@@ -397,17 +444,21 @@ export default function WhaleTracker() {
 
 
 
-            <p className="mt-3 text-2xl font-bold gradient-text">
+
+            <p className="mt-4 text-2xl font-bold gradient-text">
 
 
-              Smart Score:
+              🐋 Smart Score:
 
               {" "}
 
-              {wallet.smartMoneyScore}/100
+              {wallet.score}/100
+
 
 
             </p>
+
+
 
 
 
@@ -417,7 +468,11 @@ export default function WhaleTracker() {
 
 
 
+
+
         ))}
+
+
 
 
 
@@ -427,9 +482,12 @@ export default function WhaleTracker() {
 
 
 
+
+
     </div>
 
 
   );
+
 
 }
