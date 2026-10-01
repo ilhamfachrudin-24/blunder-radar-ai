@@ -1,20 +1,23 @@
 import { NextResponse } from "next/server";
-import { getWalletData } from "@/lib/walletTracker";
+import { getWalletData } from "@/lib/walletAnalysis";
 
 
 export async function GET(
   request: Request
 ) {
 
+
   const { searchParams } =
     new URL(request.url);
 
 
-  const wallet =
-    searchParams.get("wallet");
+
+  const address =
+    searchParams.get("address");
 
 
-  if (!wallet) {
+
+  if(!address){
 
     return NextResponse.json(
       {
@@ -29,11 +32,40 @@ export async function GET(
   }
 
 
-  const data =
-    await getWalletData(wallet);
+
+
+  try {
+
+
+    const data =
+      await getWalletData(address);
 
 
 
-  return NextResponse.json(data);
+    return NextResponse.json(data);
+
+
+
+  }
+
+  catch(error){
+
+
+    return NextResponse.json(
+
+      {
+        error:
+        "Failed wallet analysis"
+      },
+
+      {
+        status:500
+      }
+
+    );
+
+
+  }
+
 
 }
