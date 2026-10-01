@@ -8,9 +8,18 @@ import { calculateTokenRanking } from "@/lib/tokenRanking";
 export default function TokenRadar(){
 
 
-  const [tokens,setTokens]=useState<any[]>([]);
+  const [tokens,setTokens] =
+    useState<any[]>([]);
 
-  const [loading,setLoading]=useState(false);
+
+
+  const [loading,setLoading] =
+    useState(false);
+
+
+
+  const [error,setError] =
+    useState("");
 
 
 
@@ -26,6 +35,9 @@ export default function TokenRadar(){
 
 
       setLoading(true);
+
+      setError("");
+
 
 
 
@@ -43,9 +55,12 @@ export default function TokenRadar(){
 
 
 
+
       const data =
 
         await response.json();
+
+
 
 
 
@@ -61,15 +76,31 @@ export default function TokenRadar(){
 
 
 
+
+
       const solanaTokens =
 
-        pairs.filter(
 
-          (token:any)=>
+        pairs.filter((token:any)=>{
 
-            token.chainId === "solana"
 
-        );
+          return (
+
+
+            token.chainId === "solana" &&
+
+            token.baseToken?.address &&
+
+            Number(token.liquidity?.usd || 0) > 1000 &&
+
+            Number(token.volume?.h24 || 0) > 1000
+
+
+          );
+
+
+        });
+
 
 
 
@@ -82,7 +113,9 @@ export default function TokenRadar(){
 
         calculateTokenRanking(
 
-          solanaTokens.slice(0,20)
+
+          solanaTokens.slice(0,50)
+
 
         );
 
@@ -93,23 +126,68 @@ export default function TokenRadar(){
 
 
 
-      setTokens(ranking);
+      const enhanced =
+
+
+        ranking.map((token:any)=>({
+
+
+          ...token,
+
+
+          status:
+
+
+          token.blunderScore >=80
+
+          ?
+
+          "🔥 Strong Signal"
+
+
+          :
+
+          token.blunderScore >=60
+
+          ?
+
+          "👀 Watchlist"
+
+
+          :
+
+          "⚠️ High Risk"
+
+
+
+        }));
+
+
+
+
+
+
+
+
+      setTokens(enhanced);
+
+
 
 
 
     }
-
 
     catch(error){
 
 
+      setError(
 
-      console.log(error);
+        "Failed to fetch token radar data"
 
+      );
 
 
     }
-
 
     finally{
 
@@ -129,10 +207,15 @@ export default function TokenRadar(){
 
 
 
+
+
   return (
 
 
+
     <div className="card mt-10">
+
+
 
 
 
@@ -145,10 +228,13 @@ export default function TokenRadar(){
 
 
 
+
+
+
       <p className="mt-3 text-gray-400">
 
-        Discover Solana tokens using AI-powered ranking,
-        liquidity analysis, and market signals.
+        AI ranking system to discover Solana tokens
+        based on liquidity, volume, and market activity.
 
       </p>
 
@@ -157,15 +243,24 @@ export default function TokenRadar(){
 
 
 
+
+
       <button
+
 
         onClick={scanTokens}
 
+
         className="mt-5 px-6 py-3 rounded-xl bg-white text-black font-bold"
+
 
       >
 
-        {loading ?
+
+
+        {loading
+
+        ?
 
         "Scanning..."
 
@@ -175,8 +270,28 @@ export default function TokenRadar(){
 
         }
 
+
+
       </button>
 
+
+
+
+
+
+
+
+      {error && (
+
+
+        <p className="mt-5 text-red-400">
+
+          {error}
+
+        </p>
+
+
+      )}
 
 
 
@@ -189,18 +304,27 @@ export default function TokenRadar(){
 
 
 
+
+
         {tokens.map((token,index)=>(
+
 
 
 
           <div
 
+
             key={index}
+
 
             className="border border-white/10 rounded-xl p-5"
 
 
           >
+
+
+
+
 
 
 
@@ -221,7 +345,10 @@ export default function TokenRadar(){
 
 
 
+
+
             <p className="text-gray-400">
+
 
               Symbol:
 
@@ -229,6 +356,7 @@ export default function TokenRadar(){
 
               {token.symbol}
 
+
             </p>
 
 
@@ -237,13 +365,19 @@ export default function TokenRadar(){
 
 
 
+
+
             <p>
+
 
               Liquidity:
 
+
               <span className="ml-2 text-green-400">
 
-                ${token.liquidity}
+
+                ${token.liquidity.toLocaleString()}
+
 
               </span>
 
@@ -258,12 +392,16 @@ export default function TokenRadar(){
 
 
             <p>
+
 
               Volume 24h:
 
+
               <span className="ml-2">
 
-                ${token.volume}
+
+                ${token.volume.toLocaleString()}
+
 
               </span>
 
@@ -279,16 +417,21 @@ export default function TokenRadar(){
 
             <p>
 
+
               Status:
+
 
               <span className="ml-2">
 
+
                 {token.status}
+
 
               </span>
 
 
             </p>
+
 
 
 
@@ -301,12 +444,16 @@ export default function TokenRadar(){
 
               🔥 Blunder Score:
 
+
               {" "}
 
               {token.blunderScore}/100
 
 
+
             </p>
+
+
 
 
 
@@ -316,7 +463,12 @@ export default function TokenRadar(){
 
 
 
+
+
+
         ))}
+
+
 
 
 
@@ -326,9 +478,12 @@ export default function TokenRadar(){
 
 
 
+
+
     </div>
 
 
   );
+
 
 }
