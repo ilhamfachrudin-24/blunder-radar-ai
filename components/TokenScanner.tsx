@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { calculateRiskScore } from "@/lib/riskEngine";
 
 export default function TokenScanner() {
 
@@ -42,6 +43,7 @@ export default function TokenScanner() {
 
 
   const pair = data?.pairs?.[0];
+  const risk = data ? calculateRiskScore(data) : null;
 
 
   return (
@@ -141,6 +143,26 @@ export default function TokenScanner() {
               DEX:
               {pair.dexId}
             </p>
+
+            <div className="mt-6 border-t border-white/10 pt-5">
+
+<h3 className="text-xl font-bold">
+Blunder AI Rating
+</h3>
+
+
+<p className="text-4xl gradient-text font-bold mt-3">
+{risk?.score}/100
+</p>
+
+
+<p className="mt-2 text-gray-300">
+Risk Level:
+{risk?.level}
+</p>
+
+
+</div>
 
 
           </div>
