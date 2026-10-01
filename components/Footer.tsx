@@ -5,22 +5,25 @@ export default function Footer() {
     <footer className="mt-20 py-10 border-t border-white/10">
 
 
-      <div className="flex flex-col md:flex-row justify-between gap-6">
+      <div className="grid md:grid-cols-3 gap-8">
 
+
+        {/* BRAND */}
 
         <div>
 
-
-          <h2 className="text-xl font-bold">
+          <h2 className="text-2xl font-bold">
 
             🔥 Blunder Radar AI
 
           </h2>
 
 
-          <p className="text-gray-400 mt-2">
+          <p className="mt-3 text-gray-400">
 
-            AI-powered Solana intelligence platform.
+            AI-powered Solana intelligence platform
+            for token analysis, smart money tracking,
+            and Web3 research.
 
           </p>
 
@@ -30,54 +33,115 @@ export default function Footer() {
 
 
 
-        <div className="flex gap-4">
+
+        {/* PROJECT */}
+
+        <div>
+
+          <h3 className="font-bold text-lg">
+
+            Project
+
+          </h3>
 
 
-          <a
-
-          href="https://github.com"
-
-          target="_blank"
-
-          className="px-4 py-2 rounded-lg border border-white/20 hover:bg-white hover:text-black transition"
-
-          >
-
-            GitHub
-
-          </a>
+          <div className="mt-4 flex flex-col gap-3 text-gray-400">
 
 
+            <a href="#scanner">
 
-          <a
+              Token Scanner
 
-          href="https://twitter.com"
-
-          target="_blank"
-
-          className="px-4 py-2 rounded-lg border border-white/20 hover:bg-white hover:text-black transition"
-
-          >
-
-            X / Twitter
-
-          </a>
+            </a>
 
 
+            <a href="#whale">
 
-          <a
+              Whale Tracker
 
-          href="https://linkedin.com"
+            </a>
 
-          target="_blank"
 
-          className="px-4 py-2 rounded-lg border border-white/20 hover:bg-white hover:text-black transition"
+            <a href="#about">
 
-          >
+              About Builder
 
-            LinkedIn
+            </a>
 
-          </a>
+
+          </div>
+
+
+        </div>
+
+
+
+
+
+        {/* SOCIAL */}
+
+        <div>
+
+          <h3 className="font-bold text-lg">
+
+            Connect
+
+          </h3>
+
+
+          <div className="mt-4 flex flex-col gap-3">
+
+
+            <a
+
+              href="https://github.com"
+
+              target="_blank"
+
+              className="text-gray-400 hover:text-white transition"
+
+            >
+
+              GitHub
+
+            </a>
+
+
+
+
+            <a
+
+              href="https://twitter.com"
+
+              target="_blank"
+
+              className="text-gray-400 hover:text-white transition"
+
+            >
+
+              X / Twitter
+
+            </a>
+
+
+
+
+            <a
+
+              href="https://linkedin.com"
+
+              target="_blank"
+
+              className="text-gray-400 hover:text-white transition"
+
+            >
+
+              LinkedIn
+
+            </a>
+
+
+          </div>
 
 
         </div>
@@ -87,11 +151,17 @@ export default function Footer() {
 
 
 
-      <p className="text-gray-500 mt-8 text-sm">
 
-        © 2026 Blunder Radar AI. Built for Web3 research.
 
-      </p>
+      <div className="mt-10 pt-6 border-t border-white/10 text-gray-500 text-sm">
+
+
+        © 2026 Blunder Radar AI.
+        Built with Next.js and Web3 technology.
+
+
+      </div>
+
 
 
     </footer>
