@@ -7,6 +7,9 @@ import BlunderRating from "@/components/BlunderRating";
 import { useAnalysis } from "@/context/AnalysisContext";
 
 export default function Home() {
+
+  const { analysis } = useAnalysis();
+  
   return (
     <main>
 
@@ -23,6 +26,9 @@ export default function Home() {
 
 
         <TokenScanner />
+       <pre className="mt-6 rounded-lg bg-black p-4 text-sm text-green-400 overflow-auto">
+  {JSON.stringify(analysis, null, 2)}
+</pre>
 
 
         <div className="grid md:grid-cols-2 gap-6 mt-10">
