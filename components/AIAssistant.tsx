@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 
 
-export default function AIAssistant() {
+
+export default function AIAssistant(){
+
 
 
   const {
     analysis
   } = useAnalysis();
+
 
 
 
@@ -27,6 +30,7 @@ export default function AIAssistant() {
 
 
 
+
   function generateReport(){
 
 
@@ -36,7 +40,9 @@ export default function AIAssistant() {
 
 
 
+
     setTimeout(()=>{
+
 
 
 
@@ -63,6 +69,7 @@ export default function AIAssistant() {
 
 
 
+
       const smartMoney =
 
         analysis?.wallet?.smartMoneyScore || 50;
@@ -73,21 +80,21 @@ export default function AIAssistant() {
 
 
 
-      const finalScore = Math.round(
+      const finalScore =
 
-        (
+        analysis?.finalRating?.score || 50;
 
-          risk +
 
-          security +
 
-          holder +
 
-          smartMoney
 
-        ) / 4
+      const status =
 
-      );
+        analysis?.finalRating?.status ||
+
+        "Waiting Analysis";
+
+
 
 
 
@@ -97,7 +104,7 @@ export default function AIAssistant() {
 
       let conclusion =
 
-        "High risk signal. Always perform additional research before making decisions.";
+        "High risk signal detected. Perform deeper research before entering any position.";
 
 
 
@@ -108,9 +115,10 @@ export default function AIAssistant() {
       if(finalScore >= 80){
 
 
+
         conclusion =
 
-        "Strong research signal detected. Token metrics show positive indicators, but market risk remains.";
+        "Strong research signal detected. Token shows healthy indicators across multiple metrics, but market volatility remains.";
 
       }
 
@@ -119,9 +127,10 @@ export default function AIAssistant() {
       else if(finalScore >=60){
 
 
+
         conclusion =
 
-        "Moderate research signal. Monitor liquidity, holders, and smart money activity.";
+        "Moderate research signal. Monitor liquidity, holders, security, and smart money movements.";
 
       }
 
@@ -139,12 +148,17 @@ export default function AIAssistant() {
 🔥 BLUNDER RADAR AI REPORT
 
 
-━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━
 
 
-📊 Risk Score
+📌 Token Intelligence Analysis
+
+
+
+⚠️ Risk Score
 
 ${risk}/100
+
 
 
 
@@ -154,9 +168,11 @@ ${security}/100
 
 
 
+
 👥 Holder Score
 
 ${holder}/100
+
 
 
 
@@ -167,14 +183,30 @@ ${smartMoney}/100
 
 
 
+
+━━━━━━━━━━━━━━━━━━
+
+
+
 🔥 Final Blunder Rating
 
 ${finalScore}/100
 
 
 
+📊 AI Status
+
+${status}
+
+
+
+
+━━━━━━━━━━━━━━━━━━
+
+
 
 🤖 AI Conclusion:
+
 
 
 ${conclusion}
@@ -184,7 +216,9 @@ ${conclusion}
 
 ⚠️ Disclaimer:
 
-This analysis is for research purposes only, not financial advice.
+Blunder Radar AI provides blockchain research analytics only.
+This is not financial advice.
+
 
 
 `;
@@ -194,8 +228,9 @@ This analysis is for research purposes only, not financial advice.
 
 
 
-      setReport(text);
 
+
+      setReport(text);
 
 
       setLoading(false);
@@ -220,7 +255,10 @@ This analysis is for research purposes only, not financial advice.
   return (
 
 
+
     <div className="card mt-10">
+
+
 
 
 
@@ -286,7 +324,7 @@ This analysis is for research purposes only, not financial advice.
 
         <pre
 
-        className="mt-6 rounded-xl bg-black p-5 text-green-400 whitespace-pre-wrap"
+          className="mt-6 rounded-xl bg-black p-5 text-green-400 whitespace-pre-wrap"
 
         >
 
@@ -303,9 +341,13 @@ This analysis is for research purposes only, not financial advice.
 
 
 
+
+
+
     </div>
 
 
   );
+
 
 }
