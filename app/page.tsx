@@ -17,7 +17,7 @@ export default function Home() {
 
 <Navbar />
 
-  <section className="py-20">
+ <section className="py-20 fade-in">
 
 
 <h1 className="text-5xl md:text-7xl font-bold">
@@ -47,7 +47,7 @@ Web3 analytics.
 <div className="mt-8 flex gap-4">
 
 
-<button className="px-6 py-3 rounded-xl bg-white text-black font-bold">
+<button className="px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition">
 
 Start Analysis
 
