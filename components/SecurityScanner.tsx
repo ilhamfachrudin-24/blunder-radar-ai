@@ -15,6 +15,7 @@ export default function SecurityScanner() {
 
 
 
+
   useEffect(() => {
 
 
@@ -30,18 +31,23 @@ export default function SecurityScanner() {
 
 
 
+
       const security =
         await checkSolanaSecurity(address);
 
 
 
-      setAnalysis({
 
-        ...analysis,
+      setAnalysis((prev:any)=>({
+
+
+        ...prev,
 
         security
 
-      });
+
+      }));
+
 
 
     }
@@ -58,15 +64,20 @@ export default function SecurityScanner() {
 
 
 
+
   const security =
     analysis?.security;
 
 
 
 
+
+
   return (
 
+
     <div className="card mt-10">
+
 
 
       <h2 className="text-2xl font-bold">
@@ -78,13 +89,16 @@ export default function SecurityScanner() {
 
 
 
+
       {!security && (
+
 
         <p className="mt-5 text-gray-400">
 
           Checking token security...
 
         </p>
+
 
       )}
 
@@ -93,14 +107,19 @@ export default function SecurityScanner() {
 
 
 
+
+
       {security && (
 
+
         <div className="mt-5 space-y-4 text-gray-300">
+
 
 
           <p>
 
             Mint Authority:
+
 
             <span className="ml-2 text-yellow-400">
 
@@ -108,7 +127,11 @@ export default function SecurityScanner() {
 
             </span>
 
+
           </p>
+
+
+
 
 
 
@@ -117,13 +140,37 @@ export default function SecurityScanner() {
 
             Freeze Authority:
 
+
             <span className="ml-2 text-yellow-400">
 
               {security.freezeAuthority || "Unknown"}
 
             </span>
 
+
           </p>
+
+
+
+
+
+
+
+          <p>
+
+            Supply:
+
+
+            <span className="ml-2 text-gray-400">
+
+              {security.supply || "Unknown"}
+
+            </span>
+
+
+          </p>
+
+
 
 
 
@@ -133,23 +180,76 @@ export default function SecurityScanner() {
 
             Security Score:
 
+
             <span className="ml-2 gradient-text font-bold">
 
               {security.securityScore || 50}/100
 
             </span>
 
+
           </p>
+
+
+
+
+
+
+
+          {security.warnings && (
+
+            <div className="mt-4">
+
+
+              <h3 className="font-bold text-red-400">
+
+                Warnings
+
+              </h3>
+
+
+
+              {security.warnings.map(
+
+                (warning:string,index:number)=>(
+
+
+                  <p
+
+                  key={index}
+
+                  className="text-sm text-gray-400"
+
+                  >
+
+                    ⚠️ {warning}
+
+                  </p>
+
+
+                )
+
+              )}
+
+
+            </div>
+
+          )}
+
+
 
 
 
         </div>
 
+
       )}
 
 
 
+
     </div>
+
 
   );
 
