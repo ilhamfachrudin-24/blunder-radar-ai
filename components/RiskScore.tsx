@@ -14,73 +14,121 @@ export default function RiskScore() {
 
 
 
-  const risk = analysis?.risk;
+
+
+  const risk =
+
+    analysis?.risk || {
+
+      score: 0,
+
+      level: "Waiting Analysis"
+
+    };
+
+
+
+
 
 
 
   return (
 
-    <div className="card mt-6">
+
+    <div className="card mt-10">
 
 
       <h2 className="text-2xl font-bold">
 
-        ⚠️ Risk Score
+        ⚠️ Token Risk Score
 
       </h2>
 
 
 
 
-      {!risk && (
 
-        <p className="mt-4 text-gray-400">
+      <div className="mt-6 text-5xl font-bold gradient-text">
 
-          Waiting for token analysis...
+
+        {risk.score}/100
+
+
+      </div>
+
+
+
+
+
+
+      <p className="mt-4 text-gray-300">
+
+
+        Risk Level:
+
+
+        <span className="ml-2 font-bold text-white">
+
+
+          {risk.level}
+
+
+        </span>
+
+
+      </p>
+
+
+
+
+
+
+      <div className="mt-6">
+
+
+        <p className="text-gray-400 text-sm">
+
+          Analysis based on:
 
         </p>
 
-      )}
 
 
+        <ul className="mt-3 text-gray-300 space-y-2">
 
 
+          <li>
+
+            ✓ Liquidity
+
+          </li>
 
 
-      {risk && (
+          <li>
 
-        <div className="mt-5">
+            ✓ Trading Volume
 
-
-          <div className="text-5xl font-bold gradient-text">
-
-            {risk.score}/100
-
-          </div>
+          </li>
 
 
+          <li>
 
-          <p className="mt-3 text-gray-300">
+            ✓ DEX Activity
 
-            Risk Level:
-
-            <span className="ml-2 text-white">
-
-              {risk.level || "Analyzed"}
-
-            </span>
-
-          </p>
+          </li>
 
 
+        </ul>
 
-        </div>
 
-      )}
+      </div>
+
+
 
 
 
     </div>
+
 
   );
 
