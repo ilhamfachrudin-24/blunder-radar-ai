@@ -6,10 +6,7 @@ import { getTokenHolders } from "@/lib/holderWallets";
 import { rankWallets } from "@/lib/walletRanking";
 
 
-
 export default function WhaleTracker(){
-
-
 
   const {
     analysis,
@@ -17,16 +14,12 @@ export default function WhaleTracker(){
   } = useAnalysis();
 
 
-
-
   const [wallets,setWallets] =
     useState<any[]>([]);
 
 
-
   const [loading,setLoading] =
     useState(false);
-
 
 
   const [error,setError] =
@@ -36,34 +29,22 @@ export default function WhaleTracker(){
 
 
 
-
-
   async function scanWhales(){
 
 
-
     const tokenAddress =
-
       analysis?.tokenAddress;
 
 
-
-
-
     if(!tokenAddress){
-
 
       setError(
         "Analyze token first"
       );
 
-
       return;
 
     }
-
-
-
 
 
 
@@ -77,36 +58,18 @@ export default function WhaleTracker(){
 
 
 
-
-
-
-
       const holders =
-
         await getTokenHolders(
-
           tokenAddress
-
         );
-
-
-
-
 
 
 
 
       const ranked =
-
         rankWallets(
-
           holders
-
         );
-
-
-
-
 
 
 
@@ -115,86 +78,55 @@ export default function WhaleTracker(){
 
 
 
-
-
-
-
-
       if(ranked.length > 0){
 
 
-
         const topWallet =
-
           ranked[0];
-
-
-
-
 
 
 
         setAnalysis((prev:any)=>({
 
 
-
           ...prev,
-
 
 
           wallet:{
 
 
-
             smartMoneyScore:
-
               topWallet.score,
 
 
-
             smartMoneyStatus:
-
               topWallet.label,
 
 
-
             topWallet:
-
               topWallet.wallet
-
 
 
           }
 
 
-
         }));
-
-
 
       }
 
 
 
 
-
-
     }
-
     catch(error){
 
 
-
       setError(
-
-        "Failed to scan smart money"
-
+        "Failed scanning whale wallets"
       );
 
 
-
     }
-
     finally{
 
 
@@ -204,11 +136,7 @@ export default function WhaleTracker(){
     }
 
 
-
   }
-
-
-
 
 
 
@@ -217,12 +145,7 @@ export default function WhaleTracker(){
 
   return (
 
-
-
     <div className="card mt-10">
-
-
-
 
 
       <h2 className="text-2xl font-bold">
@@ -233,14 +156,9 @@ export default function WhaleTracker(){
 
 
 
-
-
-
-
-
       <p className="mt-3 text-gray-400">
 
-        Detect whale holders and rank potential smart money wallets.
+        Detect whale holders and analyze smart money wallets.
 
       </p>
 
@@ -248,24 +166,15 @@ export default function WhaleTracker(){
 
 
 
-
-
-
-
       {!analysis?.tokenAddress && (
-
 
         <p className="mt-5 text-yellow-400">
 
-          Analyze a token first.
+          Analyze token first.
 
         </p>
 
-
       )}
-
-
-
 
 
 
@@ -274,39 +183,24 @@ export default function WhaleTracker(){
 
       {analysis?.tokenAddress && (
 
-
-
         <button
-
 
           onClick={scanWhales}
 
-
           className="mt-5 px-6 py-3 rounded-xl bg-white text-black font-bold"
-
 
         >
 
-
-
-          {loading
-
+          {
+          loading
           ?
-
           "Scanning..."
-
           :
-
           "Scan Smart Money"
-
           }
-
-
 
         </button>
 
-
-
       )}
 
 
@@ -315,23 +209,14 @@ export default function WhaleTracker(){
 
 
 
+      {
+      error &&
+      <p className="mt-5 text-red-400">
 
+        {error}
 
-      {error && (
-
-
-
-        <p className="mt-5 text-red-400">
-
-          {error}
-
-        </p>
-
-
-      )}
-
-
-
+      </p>
+      }
 
 
 
@@ -341,151 +226,102 @@ export default function WhaleTracker(){
       <div className="mt-8 space-y-5">
 
 
+      {
+      wallets.slice(0,10).map(
+        (wallet,index)=>(
 
 
+        <div
 
-        {wallets
-        .slice(0,10)
-        .map((wallet,index)=>(
+          key={index}
 
+          className="border border-white/10 rounded-xl p-5"
 
+        >
 
 
-          <div
+          <h3 className="text-xl font-bold">
 
-            key={index}
+            #{index+1} {wallet.label}
 
-            className="border border-white/10 rounded-xl p-5"
+          </h3>
 
 
-          >
 
 
+          <p className="text-gray-400 mt-2">
 
+            Wallet:
 
+            <span className="ml-2">
 
+              {wallet.wallet}
 
-            <h3 className="text-xl font-bold">
+            </span>
 
+          </p>
 
-              #{index+1}
 
-              {" "}
 
-              {wallet.label}
 
 
-            </h3>
+          <p>
 
+            Balance:
 
+            <span className="ml-2 text-green-400">
 
+              {wallet.balance}
 
+            </span>
 
+          </p>
 
 
 
 
-            <p className="text-gray-400 mt-3">
 
-              Wallet:
+          <p>
 
-              <span className="ml-2">
+            Transactions:
 
-                {wallet.wallet}
+            <span className="ml-2">
 
-              </span>
+              {wallet.transactions}
 
-            </p>
+            </span>
 
+          </p>
 
 
 
 
 
+          <p className="mt-3 text-2xl font-bold gradient-text">
 
+            Smart Score:
 
+            {wallet.score}/100
 
-            <p>
 
-              Balance:
+          </p>
 
-              <span className="ml-2 text-green-400">
 
-                {wallet.balance} SOL
 
-              </span>
 
-            </p>
+        </div>
 
 
+      ))
 
-
-
-
-
-
-
-            <p>
-
-              Transactions:
-
-              <span className="ml-2">
-
-                {wallet.transactions}
-
-              </span>
-
-            </p>
-
-
-
-
-
-
-
-
-
-            <p className="mt-4 text-2xl font-bold gradient-text">
-
-
-              🐋 Smart Score:
-
-              {" "}
-
-              {wallet.score}/100
-
-
-
-            </p>
-
-
-
-
-
-
-
-          </div>
-
-
-
-
-
-        ))}
-
-
-
+      }
 
 
       </div>
 
 
 
-
-
-
-
     </div>
-
 
   );
 
