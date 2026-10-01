@@ -8,7 +8,9 @@ export function calculateBlunderScore({
 
   smartMoneyScore = 50
 
+
 }: any) {
+
 
 
   const score = Math.round(
@@ -17,15 +19,18 @@ export function calculateBlunderScore({
 
       riskScore * 0.25 +
 
-      securityScore * 0.25 +
+      securityScore * 0.30 +
 
-      holderScore * 0.25 +
+      holderScore * 0.20 +
 
       smartMoneyScore * 0.25
+
 
     )
 
   );
+
+
 
 
 
@@ -34,29 +39,99 @@ export function calculateBlunderScore({
 
 
 
-  if (score >= 80) {
+  let category =
+    "Avoid / Need More Research";
+
+
+
+
+
+
+
+  if(score >= 85){
+
 
     status =
       "Strong Research Signal";
 
+
+    category =
+      "High Potential";
+
+
+
   }
 
-  else if (score >= 60) {
+
+  else if(score >=70){
+
+
+    status =
+      "Positive Signal";
+
+
+    category =
+      "Watchlist";
+
+
+
+  }
+
+
+  else if(score >=50){
+
 
     status =
       "Moderate Signal";
 
+
+    category =
+      "Monitor";
+
+
+
   }
+
+
+
+
+
 
 
 
   return {
 
+
     score,
 
-    status
+
+    status,
+
+
+    category,
+
+
+
+    breakdown:{
+
+
+      riskScore,
+
+
+      securityScore,
+
+
+      holderScore,
+
+
+      smartMoneyScore
+
+
+    }
+
 
   };
+
 
 
 }
