@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 
 
@@ -8,90 +8,109 @@ export default function WhaleTracker() {
 
 
   const {
+
     analysis,
+
     setAnalysis
+
   } = useAnalysis();
 
 
 
-  const [wallet, setWallet] = useState("");
-
-  const [loading, setLoading] = useState(false);
 
 
+  useEffect(() => {
 
-  async function analyzeWallet() {
 
-
-    if (!wallet) return;
+    if (!analysis?.tokenAddress) return;
 
 
 
-    try {
 
 
-      setLoading(true);
+    async function analyzeWhales() {
 
 
 
-      // Placeholder smart money analysis
-      // nanti bisa diganti Helius/Birdeye API
+      // Placeholder smart money engine
+      // nanti diganti Helius/Birdeye API
 
 
-      const walletData = {
 
 
-        address: wallet,
+
+      const whaleData = {
 
 
-        activity: "Detected",
+        walletCount: 5,
 
 
         smartMoneyScore: 70,
 
 
-        label: "Potential Smart Money"
+        activity: "Accumulation Detected",
+
+
+        status: "Potential Smart Money"
+
 
 
       };
 
 
 
+
+
+
+
       setAnalysis({
+
 
         ...analysis,
 
-        wallet: walletData
+
+        wallet: whaleData
+
+
 
       });
 
 
 
-    }
-
-    finally {
-
-
-      setLoading(false);
 
 
     }
 
 
-  }
+
+
+
+
+    analyzeWhales();
+
+
+
+
+  }, [analysis?.tokenAddress]);
 
 
 
 
 
-  const walletData =
+
+
+  const wallet =
+
     analysis?.wallet;
 
 
 
 
 
+
+
   return (
+
 
     <div className="card mt-10">
 
@@ -105,53 +124,14 @@ export default function WhaleTracker() {
 
 
 
-      <input
 
 
-        value={wallet}
-
-
-        onChange={(e)=>setWallet(e.target.value)}
-
-
-        placeholder="Enter wallet address"
-
-
-        className="mt-5 w-full rounded-xl bg-black/40 border border-white/20 px-4 py-3"
-
-
-      />
-
-
-
-
-
-      <button
-
-
-        onClick={analyzeWallet}
-
-
-        className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition"
-
-
-      >
-
-        {loading ? "Analyzing..." : "Analyze Wallet"}
-
-      </button>
-
-
-
-
-
-
-      {!walletData && (
+      {!wallet && (
 
 
         <p className="mt-5 text-gray-400">
 
-          Waiting for wallet analysis...
+          Waiting for token analysis...
 
         </p>
 
@@ -163,39 +143,26 @@ export default function WhaleTracker() {
 
 
 
-
-      {walletData && (
-
-
-        <div className="mt-6 space-y-3 text-gray-300">
+      {wallet && (
 
 
 
-          <p>
-
-            Wallet:
-
-            <span className="ml-2">
-
-              {walletData.address}
-
-            </span>
-
-          </p>
-
-
+        <div className="mt-6 space-y-4 text-gray-300">
 
 
 
           <p>
 
-            Status:
+
+            Whale Wallet Detected:
+
 
             <span className="ml-2 text-green-400">
 
-              {walletData.label}
+              {wallet.walletCount}
 
             </span>
+
 
           </p>
 
@@ -205,15 +172,57 @@ export default function WhaleTracker() {
 
           <p>
 
-            Smart Money Score:
 
-            <span className="ml-2 gradient-text font-bold">
+            Activity:
 
-              {walletData.smartMoneyScore}/100
+
+            <span className="ml-2 text-yellow-400">
+
+              {wallet.activity}
 
             </span>
 
+
           </p>
+
+
+
+
+
+          <p>
+
+
+            Smart Money Score:
+
+
+            <span className="ml-2 gradient-text font-bold">
+
+              {wallet.smartMoneyScore}/100
+
+            </span>
+
+
+          </p>
+
+
+
+
+
+          <p>
+
+
+            Status:
+
+
+            <span className="ml-2 text-white">
+
+              {wallet.status}
+
+            </span>
+
+
+          </p>
+
 
 
 
@@ -224,7 +233,9 @@ export default function WhaleTracker() {
 
 
 
+
     </div>
+
 
   );
 
