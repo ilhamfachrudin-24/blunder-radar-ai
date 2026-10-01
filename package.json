@@ -8,14 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "next": "^15.5.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "tailwindcss": "latest"
+    "typescript": "^5.9.2",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.1.0",
+    "tailwindcss": "^4.1.0"
   }
 }
