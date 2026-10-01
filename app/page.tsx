@@ -6,15 +6,12 @@ import WhaleTracker from "@/components/WhaleTracker";
 import SecurityScanner from "@/components/SecurityScanner";
 import AIAssistant from "@/components/AIAssistant";
 import BlunderRating from "@/components/BlunderRating";
-import { useAnalysis } from "@/context/AnalysisContext";
 import Navbar from "@/components/Navbar";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
 
 
 export default function Home() {
-
-  const { analysis } = useAnalysis();
 
 
   return (
