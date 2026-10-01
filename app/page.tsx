@@ -2,6 +2,7 @@ import TokenScanner from "@/components/TokenScanner";
 import RiskScore from "@/components/RiskScore";
 import WhaleTracker from "@/components/WhaleTracker";
 import SecurityScanner from "@/components/SecurityScanner";
+import AIAssistant from "@/components/AIAssistant";
 
 export default function Home() {
   return (
