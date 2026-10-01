@@ -1,4 +1,17 @@
-export function analyzeHolders(data: any) {
+"use client";
+
+import { useEffect } from "react";
+import { useAnalysis } from "@/context/AnalysisContext";
+import { analyzeHolders } from "@/lib/holderAnalysis";
+
+export default function HolderAnalysis({
+  data
+}: Props) {
+
+  const {
+    analysis,
+    setAnalysis
+  } = useAnalysis();
 
   const holders =
     data?.holders || 0;
@@ -43,7 +56,28 @@ export function analyzeHolders(data: any) {
 
   }
 
+useEffect(() => {
 
+  if (!analysis?.market) return;
+
+
+  const holders =
+    analyzeHolders({
+      holders:
+      analysis?.market?.holders || 0
+    });
+
+
+  setAnalysis({
+
+    ...analysis,
+
+    holders
+
+  });
+
+
+}, [analysis?.market]);
 
   return {
 
