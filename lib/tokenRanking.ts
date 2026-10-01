@@ -1,7 +1,18 @@
-export function calculateTokenRanking(tokens:any[]) {
+import { calculateRiskScore } from "./riskEngine";
+import { calculateBlunderScore } from "./blunderScore";
 
 
-  if (!tokens || tokens.length === 0) {
+
+export function calculateTokenRanking(
+  tokens:any[]
+){
+
+
+
+  if(
+    !tokens ||
+    tokens.length === 0
+  ){
 
     return [];
 
@@ -9,84 +20,172 @@ export function calculateTokenRanking(tokens:any[]) {
 
 
 
-  const ranked = tokens.map((token)=>{
-
-
-    const liquidity =
-      Number(token.liquidity?.usd || 0);
 
 
 
-    const volume =
-      Number(token.volume?.h24 || 0);
+  const ranked =
+
+    tokens.map((token)=>{
 
 
 
-    let score = 50;
+      const risk =
+
+        calculateRiskScore({
+
+          pairs:[
+            token
+
+          ]
+
+        });
 
 
 
-    if (liquidity > 100000) {
-
-      score += 20;
-
-    }
-
-
-    if (volume > 50000) {
-
-      score += 15;
-
-    }
-
-
-    if (token.txns?.h24?.buys >
-        token.txns?.h24?.sells) {
-
-      score += 10;
-
-    }
 
 
 
-    if(score > 100){
 
-      score = 100;
 
-    }
+      const smartMoneyScore = 50;
 
 
 
-    return {
-
-      name:
-      token.baseToken?.name || "Unknown",
+      const holderScore = 50;
 
 
-      symbol:
-      token.baseToken?.symbol || "",
+
+      const securityScore = 50;
 
 
-      address:
-      token.baseToken?.address,
 
 
-      price:
-      token.priceUsd,
 
 
-      liquidity,
 
 
-      volume,
+      const blunder =
+
+        calculateBlunderScore({
 
 
-      blunderScore: score
+          riskScore:
+          risk.score,
 
-    };
+
+          securityScore,
 
 
-  });
+          holderScore,
+
+
+          smartMoneyScore
+
+
+        });
+
+
+
+
+
+
+
+
+      return {
+
+
+
+        name:
+
+          token.baseToken?.name ||
+
+          "Unknown",
+
+
+
+
+
+        symbol:
+
+          token.baseToken?.symbol ||
+
+          "",
+
+
+
+
+
+        address:
+
+          token.baseToken?.address,
+
+
+
+
+
+
+        price:
+
+          token.priceUsd,
+
+
+
+
+
+
+        liquidity:
+
+          Number(
+            token.liquidity?.usd || 0
+          ),
+
+
+
+
+
+        volume:
+
+          Number(
+            token.volume?.h24 || 0
+          ),
+
+
+
+
+
+
+        riskScore:
+
+          risk.score,
+
+
+
+
+
+
+        blunderScore:
+
+          blunder.score,
+
+
+
+
+
+
+        status:
+
+          blunder.status
+
+
+
+      };
+
+
+
+    });
+
+
+
 
 
 
@@ -94,9 +193,13 @@ export function calculateTokenRanking(tokens:any[]) {
   return ranked.sort(
 
     (a,b)=>
-    b.blunderScore-a.blunderScore
+
+      b.blunderScore -
+
+      a.blunderScore
 
   );
+
 
 
 }
