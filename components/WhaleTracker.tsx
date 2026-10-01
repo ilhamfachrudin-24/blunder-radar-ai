@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
+import { analyzeSmartMoney } from "@/lib/smartMoney";
 
 
 export default function WhaleTracker() {
@@ -27,66 +28,37 @@ export default function WhaleTracker() {
 
 
 
-
-    async function analyzeWhales() {
-
-
-
-      // Placeholder smart money engine
-      // nanti diganti Helius/Birdeye API
+    const smartMoney = analyzeSmartMoney({
 
 
 
-
-
-      const whaleData = {
-
-
-        walletCount: 5,
-
-
-        smartMoneyScore: 70,
-
-
-        activity: "Accumulation Detected",
-
-
-        status: "Potential Smart Money"
+      wallets: [],
 
 
 
-      };
+      accumulation: true
+
+
+
+    });
 
 
 
 
 
 
-
-      setAnalysis({
-
-
-        ...analysis,
+    setAnalysis({
 
 
-        wallet: whaleData
+      ...analysis,
 
 
-
-      });
+      wallet: smartMoney
 
 
 
+    });
 
-
-    }
-
-
-
-
-
-
-    analyzeWhales();
 
 
 
@@ -117,9 +89,10 @@ export default function WhaleTracker() {
 
       <h2 className="text-2xl font-bold">
 
-        🐋 Smart Money Whale Tracker
+        🐋 Smart Money Intelligence
 
       </h2>
+
 
 
 
@@ -143,6 +116,7 @@ export default function WhaleTracker() {
 
 
 
+
       {wallet && (
 
 
@@ -153,16 +127,13 @@ export default function WhaleTracker() {
 
           <p>
 
-
-            Whale Wallet Detected:
-
+            Whale Wallet:
 
             <span className="ml-2 text-green-400">
 
-              {wallet.walletCount}
+              {wallet.whaleCount}
 
             </span>
-
 
           </p>
 
@@ -170,30 +141,10 @@ export default function WhaleTracker() {
 
 
 
-          <p>
-
-
-            Activity:
-
-
-            <span className="ml-2 text-yellow-400">
-
-              {wallet.activity}
-
-            </span>
-
-
-          </p>
-
-
-
-
 
           <p>
-
 
             Smart Money Score:
-
 
             <span className="ml-2 gradient-text font-bold">
 
@@ -201,8 +152,8 @@ export default function WhaleTracker() {
 
             </span>
 
-
           </p>
+
 
 
 
@@ -210,18 +161,33 @@ export default function WhaleTracker() {
 
           <p>
 
+            Signal:
 
-            Status:
-
-
-            <span className="ml-2 text-white">
+            <span className="ml-2 text-yellow-400">
 
               {wallet.status}
 
             </span>
 
+          </p>
+
+
+
+
+
+
+          <p>
+
+            Accumulation:
+
+            <span className="ml-2 text-white">
+
+              {wallet.accumulation ? "Detected" : "None"}
+
+            </span>
 
           </p>
+
 
 
 
@@ -230,7 +196,6 @@ export default function WhaleTracker() {
 
 
       )}
-
 
 
 
