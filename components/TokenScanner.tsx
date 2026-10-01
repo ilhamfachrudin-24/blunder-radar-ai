@@ -5,48 +5,63 @@ import { useAnalysis } from "@/context/AnalysisContext";
 import Loading from "@/components/Loading";
 import { calculateRiskScore } from "@/lib/riskEngine";
 import { calculateBlunderScore } from "@/lib/blunderScore";
-import { calculateHolderScore } from "@/lib/holderAnalysis";
 
 
 export default function TokenScanner() {
 
 
   const {
-    analysis,
+
     setAnalysis
+
   } = useAnalysis();
 
 
 
 
-  const [token, setToken] = useState("");
-
-  const [loading, setLoading] = useState(false);
-
-  const [error, setError] = useState("");
-
-  const [result, setResult] = useState<any>(null);
+  const [token,setToken] =
+    useState("");
 
 
 
+  const [loading,setLoading] =
+    useState(false);
 
 
 
-  async function analyzeToken() {
+  const [error,setError] =
+    useState("");
 
 
-    if (!token) {
+
+  const [result,setResult] =
+    useState<any>(null);
+
+
+
+
+
+
+
+  async function analyzeToken(){
+
+
+
+    if(!token){
+
 
       setError("Please enter token address");
 
       return;
+
 
     }
 
 
 
 
-    try {
+
+    try{
 
 
       setLoading(true);
@@ -56,22 +71,28 @@ export default function TokenScanner() {
 
 
 
-      const response = await fetch(
 
-        `https://api.dexscreener.com/latest/dex/tokens/${token}`
+      const response =
+        await fetch(
 
-      );
+          `https://api.dexscreener.com/latest/dex/tokens/${token}`
 
-
-
-
-      const data = await response.json();
+        );
 
 
 
 
 
-      if (!data.pairs || data.pairs.length === 0) {
+      const data =
+        await response.json();
+
+
+
+
+
+
+
+      if(!data.pairs || data.pairs.length===0){
 
 
         setError("Token data not found");
@@ -85,23 +106,18 @@ export default function TokenScanner() {
 
 
 
-      const market = data.pairs[0];
+
+      const market =
+        data.pairs[0];
 
 
 
 
 
-      const risk = calculateRiskScore(data);
 
 
-
-
-
-      const holder = calculateHolderScore({
-
-        holders: market?.holders || 0
-
-      });
+      const risk =
+        calculateRiskScore(data);
 
 
 
@@ -111,11 +127,23 @@ export default function TokenScanner() {
       const security = {
 
 
-        securityScore: 50,
+        securityScore:50,
 
-        mintAuthority: "Unknown",
 
-        freezeAuthority: "Unknown"
+        mintAuthority:"Unknown",
+
+
+        freezeAuthority:"Unknown",
+
+
+        supply:"Unknown",
+
+
+        warnings:[
+
+          "Connect Solana RPC for full security scan"
+
+        ]
 
 
       };
@@ -126,35 +154,60 @@ export default function TokenScanner() {
 
 
 
-      const smartMoneyScore =
-
-        analysis?.wallet?.smartMoneyScore || 50;
+      const holder = {
 
 
+        holderScore:50,
 
 
+        holderStatus:"Waiting Holder API",
 
 
-
-      const blunder = calculateBlunderScore({
-
+        count:0
 
 
-        riskScore: risk.score,
-
-
-        securityScore: security.securityScore,
-
-
-        holderScore: holder.holderScore,
-
-
-        smartMoneyScore
+      };
 
 
 
-      });
 
+
+
+
+      const wallet = {
+
+
+        smartMoneyScore:50
+
+
+      };
+
+
+
+
+
+
+
+
+      const blunder =
+
+        calculateBlunderScore({
+
+
+          riskScore:risk.score,
+
+
+          securityScore:security.securityScore,
+
+
+          holderScore:holder.holderScore,
+
+
+          smartMoneyScore:wallet.smartMoneyScore
+
+
+
+        });
 
 
 
@@ -165,37 +218,25 @@ export default function TokenScanner() {
       const analysisData = {
 
 
-
         market,
 
 
-        tokenAddress: token,
-
+        tokenAddress:token,
 
 
         risk,
 
 
-
         security,
 
 
-
-        holders: holder,
-
+        holders:holder,
 
 
-        wallet: {
+        wallet,
 
 
-          smartMoneyScore
-
-
-        },
-
-
-
-        finalRating: blunder
+        finalRating:blunder
 
 
 
@@ -210,29 +251,28 @@ export default function TokenScanner() {
       setResult(market);
 
 
-
       setAnalysis(analysisData);
 
 
 
 
+
     }
-
-
 
     catch(error){
 
 
-      setError("Failed to analyze token");
+      setError(
+
+        "Failed to analyze token"
+
+      );
 
 
     }
 
 
-
-
-
-    finally {
+    finally{
 
 
       setLoading(false);
@@ -249,10 +289,12 @@ export default function TokenScanner() {
 
 
 
+
   return (
 
 
     <div className="card mt-6">
+
 
 
       <h2 className="text-2xl font-bold">
@@ -265,13 +307,18 @@ export default function TokenScanner() {
 
 
 
+
       <input
 
 
         value={token}
 
 
-        onChange={(e)=>setToken(e.target.value)}
+        onChange={(e)=>
+
+          setToken(e.target.value)
+
+        }
 
 
         placeholder="Enter Solana token address"
@@ -286,20 +333,25 @@ export default function TokenScanner() {
 
 
 
+
       <button
 
 
         onClick={analyzeToken}
 
 
-        className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition"
+        className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold"
 
 
       >
 
+
         Analyze Token
 
+
       </button>
+
+
 
 
 
@@ -313,13 +365,16 @@ export default function TokenScanner() {
 
 
 
+
       {error && (
+
 
         <p className="mt-5 text-red-400">
 
           {error}
 
         </p>
+
 
       )}
 
@@ -328,7 +383,10 @@ export default function TokenScanner() {
 
 
 
+
       {result && (
+
+
 
         <div className="mt-8 space-y-3">
 
@@ -338,6 +396,7 @@ export default function TokenScanner() {
             Token Result
 
           </h3>
+
 
 
 
@@ -354,6 +413,7 @@ export default function TokenScanner() {
 
 
           </p>
+
 
 
 
@@ -376,6 +436,7 @@ export default function TokenScanner() {
 
 
 
+
           <p>
 
             Liquidity:
@@ -391,10 +452,13 @@ export default function TokenScanner() {
 
 
 
+
         </div>
 
 
       )}
+
+
 
 
 
