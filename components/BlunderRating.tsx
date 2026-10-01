@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 
 
@@ -8,25 +9,11 @@ export default function BlunderRating() {
 
   const {
 
-    analysis
+    analysis,
+
+    setAnalysis
 
   } = useAnalysis();
-
-
-
-
-  const rating =
-
-    analysis?.finalRating || {
-
-
-      score: 50,
-
-      status: "Waiting Analysis"
-
-
-    };
-
 
 
 
@@ -38,15 +25,18 @@ export default function BlunderRating() {
 
 
 
+
   const security =
 
     analysis?.security?.securityScore || 50;
 
 
 
+
   const holder =
 
     analysis?.holders?.holderScore || 50;
+
 
 
 
@@ -60,10 +50,97 @@ export default function BlunderRating() {
 
 
 
+  const score = Math.round(
+
+    (
+
+      risk +
+
+      security +
+
+      holder +
+
+      smartMoney
+
+    ) / 4
+
+  );
+
+
+
+
+
+
+
+  let status =
+
+    "High Risk Signal";
+
+
+
+
+
+  if(score >= 80){
+
+
+    status =
+      "Strong Research Signal";
+
+
+  }
+
+  else if(score >=60){
+
+
+    status =
+      "Moderate Signal";
+
+
+  }
+
+
+
+
+
+
+  useEffect(()=>{
+
+
+    setAnalysis((prev:any)=>({
+
+
+      ...prev,
+
+
+      finalRating:{
+
+
+        score,
+
+
+        status
+
+
+      }
+
+
+    }));
+
+
+  },[score]);
+
+
+
+
+
+
+
+
   return (
 
 
     <div className="card mt-10 glow">
+
 
 
       <h2 className="text-3xl font-bold">
@@ -76,11 +153,17 @@ export default function BlunderRating() {
 
 
 
+
+
       <div className="mt-6 text-6xl font-bold gradient-text">
 
-        {rating.score}/100
+
+        {score}/100
+
 
       </div>
+
+
 
 
 
@@ -95,7 +178,7 @@ export default function BlunderRating() {
 
         <span className="ml-2 text-white font-bold">
 
-          {rating.status}
+          {status}
 
         </span>
 
@@ -107,7 +190,12 @@ export default function BlunderRating() {
 
 
 
+
+
+
       <div className="mt-6 grid md:grid-cols-4 gap-4 text-sm">
+
+
 
 
 
@@ -115,7 +203,7 @@ export default function BlunderRating() {
 
           Risk
 
-          <br />
+          <br/>
 
           {risk}/100
 
@@ -125,11 +213,13 @@ export default function BlunderRating() {
 
 
 
+
+
         <div className="card">
 
           Security
 
-          <br />
+          <br/>
 
           {security}/100
 
@@ -139,11 +229,13 @@ export default function BlunderRating() {
 
 
 
+
+
         <div className="card">
 
           Holder
 
-          <br />
+          <br/>
 
           {holder}/100
 
@@ -153,11 +245,13 @@ export default function BlunderRating() {
 
 
 
+
+
         <div className="card">
 
           Smart Money
 
-          <br />
+          <br/>
 
           {smartMoney}/100
 
@@ -165,7 +259,10 @@ export default function BlunderRating() {
 
 
 
+
+
       </div>
+
 
 
 
