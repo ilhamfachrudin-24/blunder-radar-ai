@@ -1,3 +1,5 @@
+"use client";
+
 import TokenScanner from "@/components/TokenScanner";
 import RiskScore from "@/components/RiskScore";
 import WhaleTracker from "@/components/WhaleTracker";
@@ -7,115 +9,210 @@ import BlunderRating from "@/components/BlunderRating";
 import { useAnalysis } from "@/context/AnalysisContext";
 import Navbar from "@/components/Navbar";
 
+
 export default function Home() {
 
   const { analysis } = useAnalysis();
-  
+
+
   return (
 
-<main className="max-w-7xl mx-auto px-6">
-
-<Navbar />
-
- <section className="py-20 fade-in">
+    <main className="max-w-7xl mx-auto px-6">
 
 
-<h1 className="text-5xl md:text-7xl font-bold">
-
-AI Powered
-
-<br />
-
-<span className="gradient-text">
-
-Solana Intelligence Platform
-
-</span>
-
-</h1>
+      <Navbar />
 
 
-<p className="mt-6 text-gray-400 text-lg max-w-2xl">
+      {/* HERO SECTION */}
 
-Analyze tokens, track smart money,
-and discover risks using AI-powered
-Web3 analytics.
-
-</p>
+      <section className="py-20 fade-in">
 
 
-<div className="mt-8 flex gap-4">
+        <h1 className="text-5xl md:text-7xl font-bold">
 
 
-<button className="px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition">
-
-Start Analysis
-
-</button>
+          AI Powered
 
 
-<button className="px-6 py-3 rounded-xl border border-white/20">
-
-View GitHub
-
-</button>
+          <br />
 
 
-</div>
+          <span className="gradient-text">
+
+            Solana Intelligence Platform
+
+          </span>
 
 
-</section>
-
-      <section className="container pt-20">
-
-        <h1 className="text-5xl font-bold gradient-text">
-          Blunder Radar AI
         </h1>
 
-        <p className="mt-5 text-gray-300 text-lg">
-          AI-powered Solana memecoin analysis platform
-          for traders and Web3 researchers.
+
+
+        <p className="mt-6 text-gray-400 text-lg max-w-2xl">
+
+          Analyze tokens, track smart money,
+          and discover risks using AI-powered
+          Web3 analytics.
+
         </p>
 
 
-        <TokenScanner />
-       <pre className="mt-6 rounded-lg bg-black p-4 text-sm text-green-400 overflow-auto">
-  {JSON.stringify(analysis, null, 2)}
-</pre>
+
+        <div className="mt-8 flex gap-4">
 
 
-        <div className="grid md:grid-cols-2 gap-6 mt-10">
+          <button className="px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition">
 
-          <RiskScore />
+            Start Analysis
 
-          <WhaleTracker />
-
-          <SecurityScanner />
-
-        </div>
+          </button>
 
 
-        <div className="card mt-10">
 
-          <h2 className="text-2xl font-bold">
-            Token Intelligence Engine
-          </h2>
+          <button className="px-6 py-3 rounded-xl border border-white/20">
 
-          <p className="mt-4 text-gray-300">
-            Blunder Radar AI analyzes token liquidity,
-            trading activity, holder distribution,
-            wallet behavior, and market signals.
-          </p>
+            View GitHub
+
+          </button>
+
 
         </div>
 
 
       </section>
 
-      <AIAssistant />
 
-      <BlunderRating />
+
+
+      {/* TOKEN INTELLIGENCE */}
+
+
+      <section id="scanner" className="mt-20">
+
+
+        <h2 className="text-3xl font-bold mb-6">
+
+          🔍 Token Intelligence
+
+        </h2>
+
+
+
+        <TokenScanner />
+
+
+
+        <RiskScore />
+
+
+
+
+        <div className="card mt-10">
+
+
+          <h2 className="text-2xl font-bold">
+
+            Token Intelligence Engine
+
+          </h2>
+
+
+
+          <p className="mt-4 text-gray-300">
+
+            Blunder Radar AI analyzes token liquidity,
+            trading activity, holder distribution,
+            wallet behavior, and market signals.
+
+          </p>
+
+
+        </div>
+
+
+      </section>
+
+
+
+
+
+      {/* SECURITY */}
+
+
+      <section className="mt-20">
+
+
+        <h2 className="text-3xl font-bold mb-6">
+
+          🛡️ Security Analysis
+
+        </h2>
+
+
+
+        <SecurityScanner />
+
+
+      </section>
+
+
+
+
+
+
+      {/* WHALE TRACKER */}
+
+
+      <section id="whale" className="mt-20">
+
+
+        <h2 className="text-3xl font-bold mb-6">
+
+          🐋 Smart Money Intelligence
+
+        </h2>
+
+
+
+        <WhaleTracker />
+
+
+      </section>
+
+
+
+
+
+
+      {/* AI ANALYSIS */}
+
+
+      <section className="mt-20">
+
+
+        <h2 className="text-3xl font-bold mb-6">
+
+          🤖 AI Analysis
+
+        </h2>
+
+
+
+        <AIAssistant />
+
+
+
+        <BlunderRating />
+
+
+      </section>
+
+
+
+
 
     </main>
+
   );
+
 }
