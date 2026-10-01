@@ -4,88 +4,153 @@ import { useEffect } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 import { checkSolanaSecurity } from "@/lib/solanaSecurity";
 
-type SecurityProps = {
-  data?: any;
-};
+
+export default function SecurityScanner() {
 
 
-export default function SecurityScanner({
-  data
-}: Props) {
+  const {
+    analysis,
+    setAnalysis
+  } = useAnalysis();
 
-  const { analysis, setAnalysis } = useAnalysis();
+
+
+  useEffect(() => {
+
+
+    async function runSecurityCheck() {
+
+
+      const address =
+        analysis?.market?.baseToken?.address;
+
+
+
+      if (!address) return;
+
+
+
+      const security =
+        await checkSolanaSecurity(address);
+
+
+
+      setAnalysis({
+
+        ...analysis,
+
+        security
+
+      });
+
+
+    }
+
+
+
+    runSecurityCheck();
+
+
+
+  }, [analysis?.market]);
+
+
+
+
+
+  const security =
+    analysis?.security;
+
+
+
 
   return (
 
     <div className="card mt-10">
 
+
       <h2 className="text-2xl font-bold">
-        Solana Security Scanner
+
+        🛡️ Solana Security Scanner
+
       </h2>
 
 
-      <div className="mt-5 space-y-3 text-gray-300">
 
-        <p>
-          Mint Authority:
-          <span className="text-yellow-400">
-            {data?.mintAuthority || "Checking..."}
-          </span>
+
+      {!security && (
+
+        <p className="mt-5 text-gray-400">
+
+          Checking token security...
+
         </p>
 
-
-        <p>
-          Freeze Authority:
-          <span className="text-yellow-400">
-            {data?.freezeAuthority || "Checking..."}
-          </span>
-        </p>
+      )}
 
 
-        <p>
-          Security Score:
-          <span className="gradient-text font-bold">
-            {data?.securityScore || 50}/100
-          </span>
-        </p>
 
 
-      </div>
+
+
+      {security && (
+
+        <div className="mt-5 space-y-4 text-gray-300">
+
+
+          <p>
+
+            Mint Authority:
+
+            <span className="ml-2 text-yellow-400">
+
+              {security.mintAuthority || "Unknown"}
+
+            </span>
+
+          </p>
+
+
+
+
+          <p>
+
+            Freeze Authority:
+
+            <span className="ml-2 text-yellow-400">
+
+              {security.freezeAuthority || "Unknown"}
+
+            </span>
+
+          </p>
+
+
+
+
+
+          <p>
+
+            Security Score:
+
+            <span className="ml-2 gradient-text font-bold">
+
+              {security.securityScore || 50}/100
+
+            </span>
+
+          </p>
+
+
+
+        </div>
+
+      )}
+
+
 
     </div>
 
-
-    useEffect(() => {
-
-  async function runSecurityCheck() {
-
-    const address =
-      analysis?.market?.pairs?.[0]?.baseToken?.address;
-
-
-    if (!address) return;
-
-
-    const security =
-      await checkSolanaSecurity(address);
-
-
-    setAnalysis({
-
-      ...analysis,
-
-      security
-
-    });
-
-
-  }
-
-
-  runSecurityCheck();
-
-
-}, [analysis?.market]);
   );
 
 }
