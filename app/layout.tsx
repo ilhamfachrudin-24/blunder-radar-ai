@@ -1,4 +1,5 @@
 import "./globals.css";
+import {AnalysisProvider} from "@/context/AnalysisContext";
 
 export const metadata = {
   title: "Blunder Radar AI",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <AnalysisProvider>
+          {children}
+        </AnalysisProvider>
       </body>
     </html>
   );
