@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 import { checkSolanaSecurity } from "@/lib/solanaSecurity";
 
 
-export default function SecurityScanner() {
+
+export default function SecurityScanner(){
 
 
   const {
@@ -15,38 +16,88 @@ export default function SecurityScanner() {
 
 
 
+  const [loading,setLoading] =
+    useState(false);
 
-  useEffect(() => {
 
 
-    async function runSecurityCheck() {
+
+
+
+
+  useEffect(()=>{
+
+
+    async function runSecurityCheck(){
+
 
 
       const address =
-        analysis?.market?.baseToken?.address;
+
+        analysis
+        ?.tokenAddress;
 
 
 
-      if (!address) return;
-
-
-
-
-      const security =
-        await checkSolanaSecurity(address);
+      if(!address) return;
 
 
 
 
-      setAnalysis((prev:any)=>({
+      if(analysis?.security) return;
 
 
-        ...prev,
-
-        security
 
 
-      }));
+
+
+      try{
+
+
+        setLoading(true);
+
+
+
+
+        const security =
+
+          await checkSolanaSecurity(
+
+            address
+
+          );
+
+
+
+
+
+
+
+        setAnalysis((prev:any)=>({
+
+
+          ...prev,
+
+
+          security
+
+
+
+        }));
+
+
+
+
+
+      }
+
+      finally{
+
+
+        setLoading(false);
+
+
+      }
 
 
 
@@ -54,11 +105,20 @@ export default function SecurityScanner() {
 
 
 
+
+
+
     runSecurityCheck();
 
 
 
-  }, [analysis?.market]);
+
+  },[
+    analysis?.tokenAddress
+  ]);
+
+
+
 
 
 
@@ -66,6 +126,7 @@ export default function SecurityScanner() {
 
 
   const security =
+
     analysis?.security;
 
 
@@ -73,7 +134,9 @@ export default function SecurityScanner() {
 
 
 
+
   return (
+
 
 
     <div className="card mt-10">
@@ -90,7 +153,9 @@ export default function SecurityScanner() {
 
 
 
-      {!security && (
+
+
+      {loading && (
 
 
         <p className="mt-5 text-gray-400">
@@ -109,10 +174,34 @@ export default function SecurityScanner() {
 
 
 
+      {!loading && !security && (
+
+
+        <p className="mt-5 text-yellow-400">
+
+          Analyze token first.
+
+        </p>
+
+
+      )}
+
+
+
+
+
+
+
+
+
       {security && (
 
 
+
         <div className="mt-5 space-y-4 text-gray-300">
+
+
+
 
 
 
@@ -120,13 +209,11 @@ export default function SecurityScanner() {
 
             Mint Authority:
 
-
             <span className="ml-2 text-yellow-400">
 
               {security.mintAuthority || "Unknown"}
 
             </span>
-
 
           </p>
 
@@ -140,13 +227,11 @@ export default function SecurityScanner() {
 
             Freeze Authority:
 
-
             <span className="ml-2 text-yellow-400">
 
               {security.freezeAuthority || "Unknown"}
 
             </span>
-
 
           </p>
 
@@ -160,14 +245,12 @@ export default function SecurityScanner() {
 
             Supply:
 
-
-            <span className="ml-2 text-gray-400">
+            <span className="ml-2">
 
               {security.supply || "Unknown"}
 
             </span>
 
-
           </p>
 
 
@@ -176,19 +259,84 @@ export default function SecurityScanner() {
 
 
 
-          <p>
-
-            Security Score:
 
 
-            <span className="ml-2 gradient-text font-bold">
+          <div>
+
+
+            <p>
+
+              Security Score:
+
+            </p>
+
+
+
+
+            <div className="mt-3 text-5xl font-bold gradient-text">
+
 
               {security.securityScore || 50}/100
 
-            </span>
+
+            </div>
 
 
-          </p>
+
+
+          </div>
+
+
+
+
+
+
+
+
+          <div className="mt-5">
+
+
+            <p className="text-gray-400">
+
+              Security Factors:
+
+            </p>
+
+
+
+            <ul className="mt-3 space-y-2">
+
+
+              <li>
+
+                ✓ Mint Authority Check
+
+              </li>
+
+
+
+              <li>
+
+                ✓ Freeze Authority Check
+
+              </li>
+
+
+
+              <li>
+
+                ✓ Token Supply Analysis
+
+              </li>
+
+
+
+            </ul>
+
+
+          </div>
+
+
 
 
 
@@ -198,14 +346,16 @@ export default function SecurityScanner() {
 
           {security.warnings && (
 
-            <div className="mt-4">
+
+            <div className="mt-5">
 
 
               <h3 className="font-bold text-red-400">
 
-                Warnings
+                ⚠️ Warnings
 
               </h3>
+
 
 
 
@@ -216,9 +366,9 @@ export default function SecurityScanner() {
 
                   <p
 
-                  key={index}
+                    key={index}
 
-                  className="text-sm text-gray-400"
+                    className="text-sm text-gray-400"
 
                   >
 
@@ -234,7 +384,10 @@ export default function SecurityScanner() {
 
             </div>
 
+
           )}
+
+
 
 
 
@@ -248,9 +401,13 @@ export default function SecurityScanner() {
 
 
 
+
+
+
     </div>
 
 
   );
+
 
 }
