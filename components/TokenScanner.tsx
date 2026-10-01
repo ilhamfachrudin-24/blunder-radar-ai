@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { calculateRiskScore } from "@/lib/riskEngine";
 import { useAnalysis } from "@/context/AnalysisContext";
+import { calculateRiskScore } from "@/lib/riskEngine";
 
 export default function TokenScanner() {
 
@@ -26,10 +27,18 @@ export default function TokenScanner() {
 
 
       const result = await response.json(); setAnalysis({
+
   market: result,
+
+  risk: risk
+
 });
 
 
+      const risk =
+  calculateRiskScore(result);
+
+      
       setData(result);
 
 
