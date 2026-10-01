@@ -4,80 +4,75 @@ import { useState } from "react";
 import { calculateTokenRanking } from "@/lib/tokenRanking";
 
 
-export default function TokenRadar() {
+
+export default function TokenRadar(){
 
 
-  const [tokens, setTokens] = useState<any[]>([]);
+  const [tokens,setTokens]=useState<any[]>([]);
 
-  const [loading, setLoading] = useState(false);
-
-
-
-
-  async function scanTokens() {
-
-
-    setLoading(true);
+  const [loading,setLoading]=useState(false);
 
 
 
-    try {
-
-
-      // Placeholder data
-      // nanti diganti API token discovery asli
-
-
-      const sampleTokens = [
-
-
-        {
-
-          baseToken: {
-
-            name: "Example Token",
-
-            symbol: "TEST",
-
-            address: "SOL_ADDRESS"
-
-          },
-
-
-          priceUsd: "0.001",
-
-          liquidity: {
-
-            usd: 150000
-
-          },
-
-
-          volume: {
-
-            h24: 90000
-
-          },
-
-
-          txns: {
-
-            h24: {
-
-              buys: 120,
-
-              sells: 70
-
-            }
-
-          }
-
-
-        }
 
 
 
-      ];
+
+  async function scanTokens(){
+
+
+
+    try{
+
+
+      setLoading(true);
+
+
+
+
+
+      const response =
+
+        await fetch(
+
+          "https://api.dexscreener.com/latest/dex/search?q=SOL"
+
+        );
+
+
+
+
+
+      const data =
+
+        await response.json();
+
+
+
+
+
+
+      const pairs =
+
+        data?.pairs || [];
+
+
+
+
+
+
+      const solanaTokens =
+
+        pairs.filter(
+
+          (token:any)=>
+
+            token.chainId === "solana"
+
+        );
+
+
+
 
 
 
@@ -85,7 +80,16 @@ export default function TokenRadar() {
 
       const ranking =
 
-        calculateTokenRanking(sampleTokens);
+        calculateTokenRanking(
+
+          solanaTokens.slice(0,20)
+
+        );
+
+
+
+
+
 
 
 
@@ -96,13 +100,25 @@ export default function TokenRadar() {
     }
 
 
-    finally {
+    catch(error){
+
+
+
+      console.log(error);
+
+
+
+    }
+
+
+    finally{
 
 
       setLoading(false);
 
 
     }
+
 
 
   }
@@ -119,6 +135,7 @@ export default function TokenRadar() {
     <div className="card mt-10">
 
 
+
       <h2 className="text-3xl font-bold">
 
         🔥 Token Radar AI
@@ -128,10 +145,10 @@ export default function TokenRadar() {
 
 
 
-
       <p className="mt-3 text-gray-400">
 
-        Discover tokens using AI-powered ranking.
+        Discover Solana tokens using AI-powered ranking,
+        liquidity analysis, and market signals.
 
       </p>
 
@@ -142,18 +159,25 @@ export default function TokenRadar() {
 
       <button
 
-
         onClick={scanTokens}
-
 
         className="mt-5 px-6 py-3 rounded-xl bg-white text-black font-bold"
 
-
       >
 
-        {loading ? "Scanning..." : "Scan Tokens"}
+        {loading ?
+
+        "Scanning..."
+
+        :
+
+        "Scan Tokens"
+
+        }
 
       </button>
+
+
 
 
 
@@ -183,7 +207,11 @@ export default function TokenRadar() {
             <h3 className="text-xl font-bold">
 
 
-              #{index+1} {token.name}
+              #{index+1}
+
+              {" "}
+
+              {token.name}
 
 
             </h3>
@@ -192,11 +220,14 @@ export default function TokenRadar() {
 
 
 
+
             <p className="text-gray-400">
 
+              Symbol:
 
-              Symbol: {token.symbol}
+              {" "}
 
+              {token.symbol}
 
             </p>
 
@@ -204,8 +235,9 @@ export default function TokenRadar() {
 
 
 
-            <p>
 
+
+            <p>
 
               Liquidity:
 
@@ -222,8 +254,10 @@ export default function TokenRadar() {
 
 
 
-            <p>
 
+
+
+            <p>
 
               Volume 24h:
 
@@ -240,15 +274,40 @@ export default function TokenRadar() {
 
 
 
+
+
+
+            <p>
+
+              Status:
+
+              <span className="ml-2">
+
+                {token.status}
+
+              </span>
+
+
+            </p>
+
+
+
+
+
+
+
             <p className="mt-3 text-2xl font-bold gradient-text">
 
 
               🔥 Blunder Score:
 
+              {" "}
+
               {token.blunderScore}/100
 
 
             </p>
+
 
 
 
@@ -262,6 +321,7 @@ export default function TokenRadar() {
 
 
       </div>
+
 
 
 
