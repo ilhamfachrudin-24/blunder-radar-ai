@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-
+import { useAnalysis } from "@/context/AnalysisContext";
 
 export default function WhaleTracker() {
 
+  const {analysis,setAnalysis} = useAnalysis();
   const [wallet, setWallet] = useState("");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,14 @@ export default function WhaleTracker() {
 
 
       setData(result);
+
+      setAnalysis({
+
+  ...analysis,
+
+  wallet: result
+
+});
 
 
     } catch(error) {
