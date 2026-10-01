@@ -1,52 +1,104 @@
 import { NextResponse } from "next/server";
 
+
 export async function GET(
   request: Request
 ) {
 
-  const { searchParams } = new URL(request.url);
 
-  const address = searchParams.get("address");
+  const { searchParams } =
+    new URL(request.url);
 
 
-  if (!address) {
+  const address =
+    searchParams.get("address");
+
+
+
+  if(!address){
 
     return NextResponse.json(
       {
-        error: "Token address required"
+        success:false,
+        error:"Token address required"
       },
       {
-        status: 400
+        status:400
       }
     );
 
   }
+
 
 
   try {
 
-    const response = await fetch(
-      `https://api.dexscreener.com/latest/dex/tokens/${address}`
-    );
+
+    const response =
+      await fetch(
+
+        `https://api.dexscreener.com/latest/dex/tokens/${address}`,
+
+        {
+          cache:"no-store"
+        }
+
+      );
 
 
-    const data = await response.json();
 
 
-    return NextResponse.json(data);
+    if(!response.ok){
+
+      throw new Error(
+        "Dexscreener API failed"
+      );
+
+    }
 
 
-  } catch (error) {
 
-    return NextResponse.json(
-      {
-        error: "Failed to fetch token data"
-      },
-      {
-        status: 500
-      }
-    );
+
+    const data =
+      await response.json();
+
+
+
+
+    return NextResponse.json({
+
+      success:true,
+
+      data
+
+    });
+
+
 
   }
+
+  catch(error){
+
+
+    return NextResponse.json(
+
+      {
+
+        success:false,
+
+        error:
+        "Failed to fetch token data"
+
+      },
+
+      {
+        status:500
+      }
+
+    );
+
+
+  }
+
 
 }
