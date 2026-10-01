@@ -3,39 +3,31 @@
 import { useState } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 import Loading from "@/components/Loading";
+
 import { calculateRiskScore } from "@/lib/riskEngine";
 import { calculateBlunderScore } from "@/lib/blunderScore";
+import { calculateHolderScore } from "@/lib/holderAnalysis";
+import { checkSolanaSecurity } from "@/lib/solanaSecurity";
 
 
-export default function TokenScanner() {
+
+export default function TokenScanner(){
 
 
   const {
-
     setAnalysis
-
   } = useAnalysis();
 
 
 
 
-  const [token,setToken] =
-    useState("");
+  const [token,setToken]=useState("");
 
+  const [loading,setLoading]=useState(false);
 
+  const [error,setError]=useState("");
 
-  const [loading,setLoading] =
-    useState(false);
-
-
-
-  const [error,setError] =
-    useState("");
-
-
-
-  const [result,setResult] =
-    useState<any>(null);
+  const [result,setResult]=useState<any>(null);
 
 
 
@@ -46,17 +38,15 @@ export default function TokenScanner() {
   async function analyzeToken(){
 
 
-
     if(!token){
 
-
-      setError("Please enter token address");
+      setError(
+        "Please enter token address"
+      );
 
       return;
 
-
     }
-
 
 
 
@@ -71,7 +61,6 @@ export default function TokenScanner() {
 
 
 
-
       const response =
         await fetch(
 
@@ -82,23 +71,22 @@ export default function TokenScanner() {
 
 
 
-
       const data =
         await response.json();
 
 
 
 
+      if(
+        !data.pairs ||
+        data.pairs.length===0
+      ){
 
-
-
-      if(!data.pairs || data.pairs.length===0){
-
-
-        setError("Token data not found");
+        setError(
+          "Token data not found"
+        );
 
         return;
-
 
       }
 
@@ -106,10 +94,8 @@ export default function TokenScanner() {
 
 
 
-
       const market =
         data.pairs[0];
-
 
 
 
@@ -124,49 +110,21 @@ export default function TokenScanner() {
 
 
 
-      const security = {
-
-
-        securityScore:50,
-
-
-        mintAuthority:"Unknown",
-
-
-        freezeAuthority:"Unknown",
-
-
-        supply:"Unknown",
-
-
-        warnings:[
-
-          "Connect Solana RPC for full security scan"
-
-        ]
-
-
-      };
+      const security =
+        await checkSolanaSecurity(token);
 
 
 
 
 
 
+      const holder =
+        calculateHolderScore({
 
-      const holder = {
+          holders:
+          market?.holders || 0
 
-
-        holderScore:50,
-
-
-        holderStatus:"Waiting Holder API",
-
-
-        count:0
-
-
-      };
+        });
 
 
 
@@ -177,11 +135,14 @@ export default function TokenScanner() {
       const wallet = {
 
 
-        smartMoneyScore:50
+        smartMoneyScore:50,
+
+
+        smartMoneyStatus:
+        "Waiting wallet analysis"
 
 
       };
-
 
 
 
@@ -194,17 +155,20 @@ export default function TokenScanner() {
         calculateBlunderScore({
 
 
-          riskScore:risk.score,
+          riskScore:
+          risk.score,
 
 
-          securityScore:security.securityScore,
+          securityScore:
+          security.securityScore,
 
 
-          holderScore:holder.holderScore,
+          holderScore:
+          holder.holderScore,
 
 
-          smartMoneyScore:wallet.smartMoneyScore
-
+          smartMoneyScore:
+          wallet.smartMoneyScore
 
 
         });
@@ -239,9 +203,7 @@ export default function TokenScanner() {
         finalRating:blunder
 
 
-
       };
-
 
 
 
@@ -256,16 +218,14 @@ export default function TokenScanner() {
 
 
 
-
     }
+
 
     catch(error){
 
 
       setError(
-
         "Failed to analyze token"
-
       );
 
 
@@ -292,9 +252,7 @@ export default function TokenScanner() {
 
   return (
 
-
     <div className="card mt-6">
-
 
 
       <h2 className="text-2xl font-bold">
@@ -307,25 +265,17 @@ export default function TokenScanner() {
 
 
 
-
       <input
-
 
         value={token}
 
-
         onChange={(e)=>
-
           setToken(e.target.value)
-
         }
-
 
         placeholder="Enter Solana token address"
 
-
         className="mt-5 w-full rounded-xl bg-black/40 border border-white/20 px-4 py-3"
-
 
       />
 
@@ -336,18 +286,13 @@ export default function TokenScanner() {
 
       <button
 
-
         onClick={analyzeToken}
-
 
         className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold"
 
-
       >
 
-
         Analyze Token
-
 
       </button>
 
@@ -355,19 +300,16 @@ export default function TokenScanner() {
 
 
 
-
-
-
-      {loading && <Loading />}
-
-
+      {loading &&
+        <Loading />
+      }
 
 
 
 
 
-      {error && (
 
+      {error &&
 
         <p className="mt-5 text-red-400">
 
@@ -375,96 +317,75 @@ export default function TokenScanner() {
 
         </p>
 
-
-      )}
-
+      }
 
 
 
 
 
 
-      {result && (
+      {result &&
+
+      <div className="mt-8 space-y-3">
+
+
+        <h3 className="text-xl font-bold">
+
+          Token Result
+
+        </h3>
 
 
 
-        <div className="mt-8 space-y-3">
+        <p>
 
+          Token:
 
-          <h3 className="text-xl font-bold">
+          <span className="ml-2 text-gray-400">
 
-            Token Result
+            {result.baseToken?.name}
 
-          </h3>
+          </span>
 
-
-
-
-
-          <p>
-
-            Token:
-
-            <span className="ml-2 text-gray-400">
-
-              {result.baseToken?.name}
-
-            </span>
-
-
-          </p>
+        </p>
 
 
 
 
+        <p>
 
+          Price:
 
-          <p>
+          <span className="ml-2 text-gray-400">
 
-            Price:
+            ${result.priceUsd}
 
-            <span className="ml-2 text-gray-400">
+          </span>
 
-              ${result.priceUsd}
-
-            </span>
-
-
-          </p>
+        </p>
 
 
 
 
+        <p>
+
+          Liquidity:
+
+          <span className="ml-2 text-gray-400">
+
+            ${result.liquidity?.usd}
+
+          </span>
+
+        </p>
 
 
-          <p>
+      </div>
 
-            Liquidity:
-
-            <span className="ml-2 text-gray-400">
-
-              ${result.liquidity?.usd}
-
-            </span>
-
-
-          </p>
-
-
-
-
-        </div>
-
-
-      )}
-
-
-
-
+      }
 
 
     </div>
-
 
   );
 
