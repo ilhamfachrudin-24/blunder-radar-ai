@@ -51,6 +51,8 @@ export default function Home() {
 
       </section>
 
+      <AIAssistant />
+
     </main>
   );
 }
