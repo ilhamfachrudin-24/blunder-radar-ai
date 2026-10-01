@@ -9,6 +9,7 @@ import BlunderRating from "@/components/BlunderRating";
 import { useAnalysis } from "@/context/AnalysisContext";
 import Navbar from "@/components/Navbar";
 import About from "@/components/About";
+import Footer from "@/components/Footer";
 
 
 export default function Home() {
@@ -214,6 +215,12 @@ export default function Home() {
       {/* ABOUT BUILDER */}
 
       <About />
+
+
+
+      {/* FOOTER */}
+
+      <Footer />
 
 
 
