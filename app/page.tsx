@@ -1,6 +1,7 @@
 "use client";
 
 import TokenScanner from "@/components/TokenScanner";
+import TokenRadar from "@/components/TokenRadar";
 import RiskScore from "@/components/RiskScore";
 import WhaleTracker from "@/components/WhaleTracker";
 import SecurityScanner from "@/components/SecurityScanner";
@@ -22,7 +23,9 @@ export default function Home() {
       <Navbar />
 
 
+
       {/* HERO SECTION */}
+
 
       <section className="py-20 fade-in">
 
@@ -83,6 +86,30 @@ export default function Home() {
 
 
 
+
+      {/* TOKEN RADAR */}
+
+
+      <section id="radar" className="mt-20">
+
+
+        <h2 className="text-3xl font-bold mb-6">
+
+          🔥 Token Radar AI
+
+        </h2>
+
+
+        <TokenRadar />
+
+
+      </section>
+
+
+
+
+
+
       {/* TOKEN INTELLIGENCE */}
 
 
@@ -135,6 +162,7 @@ export default function Home() {
 
 
 
+
       {/* SECURITY */}
 
 
@@ -159,6 +187,7 @@ export default function Home() {
 
 
 
+
       {/* WHALE TRACKER */}
 
 
@@ -177,6 +206,7 @@ export default function Home() {
 
 
       </section>
+
 
 
 
@@ -209,13 +239,19 @@ export default function Home() {
 
 
 
+
+
+
       {/* ABOUT BUILDER */}
+
 
       <About />
 
 
 
+
       {/* FOOTER */}
+
 
       <Footer />
 
