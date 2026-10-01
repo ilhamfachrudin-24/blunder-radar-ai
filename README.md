@@ -1,153 +1,205 @@
 # 🔥 Blunder Radar AI
 
-## AI-Powered Solana Intelligence Platform
+AI-powered Solana intelligence platform for memecoin research, token risk analysis, smart money tracking, and Web3 analytics.
+
+![Blunder Radar AI](https://img.shields.io/badge/Web3-Solana-purple)
+![AI](https://img.shields.io/badge/AI-Powered-blue)
+![Next.js](https://img.shields.io/badge/Next.js-TypeScript-black)
+
+---
+
+## 🚀 Overview
+
+Blunder Radar AI is an intelligent Web3 research platform designed to help crypto traders analyze Solana tokens using AI-powered analytics.
+
+The platform combines market data, risk analysis, security checks, holder analysis, and smart money intelligence into one dashboard.
+
+---
+
+# ✨ Features
+
+## 🔍 Token Intelligence
+
+- Solana token analysis
+- Market data tracking
+- Liquidity analysis
+- Trading volume analysis
+- DEX activity monitoring
+
+---
+
+## ⚠️ Risk Engine
+
+Analyzes:
+
+- Liquidity strength
+- Trading activity
+- Market signals
+- Token risk indicators
+
+Output:
+
+- Risk Score
+- Risk Level
+
+---
+
+## 🛡️ Security Scanner
+
+Checks:
+
+- Mint authority
+- Freeze authority
+- Token security indicators
+
+Future integration:
+
+- Solana RPC
+- Helius API
+- Birdeye API
+
+---
+
+## 🐋 Smart Money Intelligence
+
+Tracks:
+
+- Whale activity
+- Smart money signals
+- Wallet behavior
+
+Future improvements:
+
+- Early buyer detection
+- Profitable wallet tracking
+- Whale clustering
+
+---
+
+## 👥 Holder Analysis
+
+Analyzes:
+
+- Holder distribution
+- Concentration risk
+- Holder quality score
+
+---
+
+## 🤖 AI Research Assistant
+
+Generates:
+
+- Token research report
+- Risk summary
+- Market overview
+- AI conclusion
+
+---
+
+## 🔥 Blunder AI Rating
+
+Combines:
+
+Risk Score 25%
+
+Security Score 25%
+
+Holder Score 25%
+
+Smart Money 25%
 
 
-Blunder Radar AI is a Web3 analytics platform designed to help crypto researchers and traders analyze Solana tokens, track smart money activity, and evaluate market risks using AI-powered intelligence.
+Result:
+
+Blunder Score 0-100
 
 
+---
 
-## 🚀 Features
+# 🏗️ Tech Stack
 
-
-### 🔍 Token Intelligence
-
-- Token market analysis
-- Liquidity monitoring
-- Trading activity insights
-- Market signal detection
-
-
-### 🛡️ Security Analysis
-
-- Token security evaluation
-- Mint authority checking
-- Freeze authority monitoring
-- Risk identification
-
-
-### 🐋 Smart Money Intelligence
-
-- Wallet activity tracking
-- Whale behavior analysis
-- Smart money scoring
-
-
-### 🤖 AI Analysis Engine
-
-- Risk scoring
-- Holder analysis
-- Security evaluation
-- Final Blunder AI Rating
-
-
-
-## ⭐ Blunder AI Rating
-
-
-The platform combines multiple indicators:
-
-Risk Score
-
-Security Score
-
-Holder Distribution
-
-Smart Money Activity
-
-=
-
-Blunder AI Rating
-
-
-
-
-## 🛠️ Built With
-
-
-Frontend:
+## Frontend
 
 - Next.js
 - React
 - TypeScript
 - Tailwind CSS
 
+## Web3
 
-Blockchain:
+- Solana ecosystem
+- DexScreener API
 
-- Solana
-- Solana RPC
+## AI
 
+- AI analysis engine
+- Automated research system
 
-Development:
+---
 
-- GitHub
-- AI-assisted development
-
-
-
-## 📂 Project Structure
+# 📂 Project Structure
 
 app/
-├── layout.tsx
-├── page.tsx
-└── globals.css
-
 components/
-
-├── TokenScanner.tsx
-├── SecurityScanner.tsx
-├── WhaleTracker.tsx
-├── BlunderRating.tsx
-├── AIAssistant.tsx
-├── Navbar.tsx
-├── Footer.tsx
-└── About.tsx
-
+context/
 lib/
+public/
 
-├── riskEngine.ts
-├── holderAnalysis.ts
-├── blunderScore.ts
-└── smartMoneyScore.ts
+---
 
+# 🛠️ Installation
 
+Clone repository:
 
+```bash
+git clone YOUR_REPOSITORY_URL
 
-## 🎯 Vision
+Install dependencies:
+npm install
 
-
-Build a powerful AI assistant for Web3 researchers by combining:
-
-- Blockchain intelligence
-- AI automation
-- Wallet analysis
-- Token security research
+Run development:
+npm run dev
 
 
+🧠 Roadmap
+Phase 1 ✅
+Dashboard UI
+Token Scanner
+Risk Engine
+Holder Analysis
+AI Rating System
+Phase 2 🚧
+Real Solana RPC integration
+Whale wallet tracking
+Smart money detection
+Security improvements
+Phase 3 🔥
+AI trading assistant
+Automated monitoring
+Telegram alerts
+Trading bot integration
 
-## 👨‍💻 Builder
 
+⚠️ Disclaimer
 
-Built by a Web3 builder focused on:
-
-- Blockchain technology
-- AI automation
-- Crypto research tools
-- Decentralized applications
-
-
-
-## 📌 Disclaimer
-
-
-This project is for research and educational purposes.
+Blunder Radar AI is a research and analytics tool.
 
 It does not provide financial advice.
 
+Always perform your own research before making investment decisions.
 
 
-## ⭐ Support
+👨‍💻 Builder
+
+Created as a Web3 AI research platform.
+
+Building tools for the next generation of crypto traders.
 
 
-If you find this project useful, consider giving it a star ⭐
+---
+
+Commit:
+
+```text
+Create professional README for Blunder Radar AI
