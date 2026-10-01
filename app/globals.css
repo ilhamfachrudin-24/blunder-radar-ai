@@ -40,6 +40,81 @@ body {
   color: transparent;
 }
 
+.gradient-text {
+
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #8b5cf6
+  );
+
+  -webkit-background-clip: text;
+
+  color: transparent;
+
+}
+
+
+.card {
+
+  background: rgba(255,255,255,0.05);
+
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  border-radius: 20px;
+
+  padding: 24px;
+
+  transition: all 0.3s ease;
+
+}
+
+
+.card:hover {
+
+  transform: translateY(-5px);
+
+}
+
+
+.glow {
+
+  box-shadow:
+  0 0 40px rgba(139,92,246,0.25);
+
+}
+
+
+.fade-in {
+
+  animation:
+  fadeIn 0.8s ease forwards;
+
+}
+
+
+@keyframes fadeIn {
+
+  from {
+
+    opacity:0;
+
+    transform:translateY(20px);
+
+  }
+
+
+  to {
+
+    opacity:1;
+
+    transform:translateY(0);
+
+  }
+
+}
 button {
   cursor: pointer;
 }
