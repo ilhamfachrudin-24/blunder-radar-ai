@@ -23,17 +23,55 @@ export function calculateSmartMoneyScore(
 
 
 
+  const profitableTrades =
+
+    Number(
+      walletData?.profitableTrades || 0
+    );
 
 
+
+  const tokenAge =
+
+    Number(
+      walletData?.walletAge || 0
+    );
+
+
+
+
+
+
+  // Wallet balance signal
 
   if(balance >=100){
 
-    score +=25;
+    score +=15;
 
   }
 
   else if(balance >=20){
 
+    score +=8;
+
+  }
+
+
+
+
+
+
+
+  // Activity signal
+
+  if(transactions >=50){
+
+    score +=20;
+
+  }
+
+  else if(transactions >=10){
+
     score +=10;
 
   }
@@ -42,17 +80,35 @@ export function calculateSmartMoneyScore(
 
 
 
-  if(transactions >=20){
 
-    score +=25;
+
+
+  // Successful trading history
+
+  if(profitableTrades >=10){
+
+    score +=15;
 
   }
 
-  else if(transactions >=5){
+
+
+
+
+
+
+
+  // Older wallet is usually more reliable
+
+  if(tokenAge >=180){
 
     score +=10;
 
   }
+
+
+
+
 
 
 
@@ -68,9 +124,11 @@ export function calculateSmartMoneyScore(
 
   if(score <0){
 
-    score=0;
+    score =0;
 
   }
+
+
 
 
 
@@ -79,15 +137,31 @@ export function calculateSmartMoneyScore(
 
 
   let status =
+
     "Normal Wallet";
 
 
 
-  if(score >=80){
+
+
+
+
+  if(score >=85){
 
 
     status =
-    "Potential Smart Money";
+
+    "🔥 Strong Smart Money";
+
+
+  }
+
+  else if(score >=70){
+
+
+    status =
+
+    "🐋 Active Whale Trader";
 
 
   }
@@ -96,10 +170,14 @@ export function calculateSmartMoneyScore(
 
 
     status =
-    "Active Wallet";
+
+    "👀 Active Wallet";
 
 
   }
+
+
+
 
 
 
@@ -115,7 +193,28 @@ export function calculateSmartMoneyScore(
     score,
 
 
-    status
+    status,
+
+
+    metrics:{
+
+
+      balance,
+
+
+      transactions,
+
+
+      profitableTrades,
+
+
+      walletAgeDays:
+
+      tokenAge
+
+
+
+    }
 
 
 
