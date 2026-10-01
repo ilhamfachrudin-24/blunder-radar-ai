@@ -9,27 +9,29 @@ export default function AIAssistant() {
 
   const {
 
-    analysis,
-
-    setAnalysis
+    analysis
 
   } = useAnalysis();
 
 
 
 
+  const [report, setReport] = useState("");
+
   const [loading, setLoading] = useState(false);
 
-  const [message, setMessage] = useState("");
 
 
 
 
 
-  async function generateInsight() {
+
+  function generateReport() {
 
 
     setLoading(true);
+
+
 
 
 
@@ -38,49 +40,68 @@ export default function AIAssistant() {
 
 
       const risk =
+
         analysis?.risk?.score || 50;
 
 
 
       const security =
+
         analysis?.security?.securityScore || 50;
 
 
 
+
+      const holder =
+
+        analysis?.holders?.holderScore || 50;
+
+
+
+
       const smartMoney =
+
         analysis?.wallet?.smartMoneyScore || 50;
 
 
 
 
+      const finalScore =
+
+        analysis?.finalRating?.score || 50;
 
 
-      let result = "";
 
 
 
-      if (
-
-        risk > 70 &&
-
-        security > 70 &&
-
-        smartMoney > 60
-
-      ) {
 
 
-        result =
-        "Strong research signal. Token shows positive indicators based on current analysis.";
+
+      let conclusion =
+
+        "Token requires deeper research before entering.";
+
+
+
+
+
+
+      if (finalScore >= 80) {
+
+
+        conclusion =
+
+        "Token shows strong indicators based on current analysis.";
 
 
       }
 
-      else {
+      else if (finalScore >= 60) {
 
 
-        result =
-        "Mixed signal. Always perform deeper research before making decisions.";
+        conclusion =
+
+        "Token has moderate potential but requires monitoring.";
 
 
       }
@@ -89,17 +110,51 @@ export default function AIAssistant() {
 
 
 
-      setMessage(result);
 
 
 
-      setAnalysis({
+      const text = `
 
-        ...analysis,
+🔥 BLUNDER RADAR AI REPORT
 
-        aiInsight: result
 
-      });
+Risk Score:
+${risk}/100
+
+
+Security Score:
+${security}/100
+
+
+Holder Score:
+${holder}/100
+
+
+Smart Money Score:
+${smartMoney}/100
+
+
+
+Final Blunder Rating:
+
+${finalScore}/100
+
+
+
+AI Conclusion:
+
+${conclusion}
+
+
+      `;
+
+
+
+
+
+
+
+      setReport(text);
 
 
 
@@ -107,11 +162,16 @@ export default function AIAssistant() {
 
 
 
-    },1500);
+    },1000);
+
 
 
 
   }
+
+
+
+
 
 
 
@@ -133,12 +193,14 @@ export default function AIAssistant() {
 
 
 
-      <p className="mt-3 text-gray-400">
+      <p className="mt-4 text-gray-400">
 
-        AI analyzes market signals,
-        security, and smart money activity.
+        AI analyzes token fundamentals,
+        security, holders, and smart money.
 
       </p>
+
+
 
 
 
@@ -147,7 +209,7 @@ export default function AIAssistant() {
       <button
 
 
-        onClick={generateInsight}
+        onClick={generateReport}
 
 
         className="mt-5 px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition"
@@ -155,7 +217,7 @@ export default function AIAssistant() {
 
       >
 
-        {loading ? "Analyzing..." : "Generate AI Insight"}
+        {loading ? "Generating..." : "Generate Report"}
 
       </button>
 
@@ -164,19 +226,22 @@ export default function AIAssistant() {
 
 
 
-      {message && (
 
 
-        <div className="mt-6 rounded-xl border border-white/10 p-5 text-gray-300">
+      {report && (
 
 
-          {message}
+        <pre className="mt-6 rounded-xl bg-black p-5 text-green-400 whitespace-pre-wrap">
 
 
-        </div>
+          {report}
+
+
+        </pre>
 
 
       )}
+
 
 
 
