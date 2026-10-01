@@ -1,52 +1,46 @@
 "use client";
 
 import {
-  createContext,
-  useContext,
-  useState
+createContext,
+useContext,
+useState
 } from "react";
 
 
-const AnalysisContext = createContext<any>(null);
-
+const AnalysisContext=createContext<any>(null);
 
 
 export function AnalysisProvider({
-  children
-}: {
-  children: React.ReactNode
-}) {
+children
+}:{
+children:React.ReactNode
+}){
 
 
-  const [analysis, setAnalysis] =
-    useState<any>({});
+const [analysis,setAnalysis]=useState<any>(null);
 
 
+return (
 
-  return (
+<AnalysisContext.Provider
+value={{
+analysis,
+setAnalysis
+}}
+>
 
-    <AnalysisContext.Provider
+{children}
 
-      value={{
-        analysis,
-        setAnalysis
-      }}
+</AnalysisContext.Provider>
 
-    >
-
-      {children}
-
-    </AnalysisContext.Provider>
-
-  );
+)
 
 }
 
 
 
+export function useAnalysis(){
 
-export function useAnalysis() {
-
-  return useContext(AnalysisContext);
+return useContext(AnalysisContext);
 
 }
