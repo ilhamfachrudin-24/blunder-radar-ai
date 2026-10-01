@@ -5,56 +5,69 @@ const RPC_URL =
 
 export async function checkSolanaSecurity(
   address:string
-) {
+){
 
 
   try {
 
 
 
-    const response =
-      await fetch(
+    const response = await fetch(
 
-        RPC_URL,
+      RPC_URL,
 
-        {
-
-          method:"POST",
+      {
 
 
-          headers:{
-
-            "Content-Type":
-            "application/json"
-
-          },
+        method:"POST",
 
 
-          body:JSON.stringify({
+        headers:{
 
-            jsonrpc:"2.0",
 
-            id:1,
+          "Content-Type":
+          "application/json"
 
-            method:"getAccountInfo",
 
-            params:[
+        },
 
-              address,
 
-              {
+        body:JSON.stringify({
 
-                encoding:"jsonParsed"
 
-              }
+          jsonrpc:"2.0",
 
-            ]
 
-          })
+          id:1,
 
-        }
 
-      );
+          method:"getAccountInfo",
+
+
+          params:[
+
+
+            address,
+
+
+            {
+
+              encoding:
+              "jsonParsed"
+
+            }
+
+
+          ]
+
+        })
+
+
+      }
+
+
+    );
+
 
 
 
@@ -67,16 +80,30 @@ export async function checkSolanaSecurity(
 
 
 
+
+
+    const account =
+
+      data?.result?.value;
+
+
+
+
+
+
+
+
     let securityScore = 50;
 
 
 
     let mintAuthority =
-      "Unknown";
+      null;
+
 
 
     let freezeAuthority =
-      "Unknown";
+      null;
 
 
 
@@ -85,28 +112,190 @@ export async function checkSolanaSecurity(
 
 
 
-    const account =
-      data?.result?.value;
+    let warnings:string[] = [];
 
 
 
 
 
-    if(account){
 
 
-      securityScore +=20;
+
+
+    if(!account){
+
+
+
+      return {
+
+
+        tokenAddress:address,
+
+
+        mintAuthority:null,
+
+
+        freezeAuthority:null,
+
+
+        supply:"Unknown",
+
+
+        securityScore:20,
+
+
+        warnings:[
+
+          "Token account not found"
+
+        ]
+
+
+      };
 
 
     }
 
-    else {
 
 
-      securityScore -=30;
+
+
+
+
+
+
+    const parsed =
+
+      account?.data?.parsed?.info;
+
+
+
+
+
+
+
+
+    if(parsed){
+
+
+
+
+
+      mintAuthority =
+
+        parsed?.mintAuthority || null;
+
+
+
+
+
+      freezeAuthority =
+
+        parsed?.freezeAuthority || null;
+
+
+
+
+
+
+
+
+      supply =
+
+        parsed?.supply || "Unknown";
+
 
 
     }
+
+
+
+
+
+
+
+
+
+
+    // Mint Authority Check
+
+
+    if(mintAuthority){
+
+
+      securityScore -= 20;
+
+
+
+      warnings.push(
+
+        "Mint authority is active. Token supply can be increased."
+
+      );
+
+
+    }
+
+    else{
+
+
+      securityScore +=15;
+
+
+    }
+
+
+
+
+
+
+
+
+
+    // Freeze Authority Check
+
+
+    if(freezeAuthority){
+
+
+
+      securityScore -=15;
+
+
+
+      warnings.push(
+
+        "Freeze authority detected. Token accounts may be frozen."
+
+      );
+
+
+    }
+
+    else{
+
+
+      securityScore +=10;
+
+
+    }
+
+
+
+
+
+
+
+
+
+    // Existing account bonus
+
+
+    securityScore +=10;
+
+
+
+
 
 
 
@@ -114,17 +303,49 @@ export async function checkSolanaSecurity(
 
     if(securityScore >100){
 
-      securityScore=100;
+
+      securityScore = 100;
+
 
     }
+
+
+
 
 
 
     if(securityScore <0){
 
-      securityScore=0;
+
+      securityScore = 0;
+
 
     }
+
+
+
+
+
+
+
+
+
+    if(warnings.length === 0){
+
+
+      warnings.push(
+
+        "No critical authority risks detected."
+
+      );
+
+
+    }
+
+
+
+
+
 
 
 
@@ -136,29 +357,45 @@ export async function checkSolanaSecurity(
       tokenAddress:address,
 
 
-      mintAuthority,
+      mintAuthority:
 
 
-      freezeAuthority,
+        mintAuthority || "Disabled",
+
+
+
+
+
+      freezeAuthority:
+
+
+        freezeAuthority || "Disabled",
+
+
+
 
 
       supply,
+
+
+
 
 
       securityScore,
 
 
 
-      warnings:[
 
-        "Advanced authority detection requires SPL Token parsing",
 
-        "Always verify liquidity lock and holder distribution"
+      warnings
 
-      ]
 
 
     };
+
+
+
+
 
 
 
@@ -187,6 +424,7 @@ export async function checkSolanaSecurity(
       securityScore:40,
 
 
+
       warnings:[
 
         "Unable to connect Solana RPC"
@@ -194,10 +432,13 @@ export async function checkSolanaSecurity(
       ]
 
 
+
     };
 
 
+
   }
+
 
 
 }
