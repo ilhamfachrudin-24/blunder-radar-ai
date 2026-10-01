@@ -3,56 +3,91 @@
 import { useState } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 
+
 export default function WhaleTracker() {
 
-  const {analysis,setAnalysis} = useAnalysis();
+
+  const {
+    analysis,
+    setAnalysis
+  } = useAnalysis();
+
+
+
   const [wallet, setWallet] = useState("");
-  const [data, setData] = useState<any>(null);
+
   const [loading, setLoading] = useState(false);
 
 
 
-  async function trackWallet() {
+  async function analyzeWallet() {
+
 
     if (!wallet) return;
 
 
-    setLoading(true);
-
 
     try {
 
-      const response =
-        await fetch(
-          `/api/wallet?wallet=${wallet}`
-        );
+
+      setLoading(true);
 
 
-      const result =
-        await response.json();
+
+      // Placeholder smart money analysis
+      // nanti bisa diganti Helius/Birdeye API
 
 
-      setData(result);
+      const walletData = {
+
+
+        address: wallet,
+
+
+        activity: "Detected",
+
+
+        smartMoneyScore: 70,
+
+
+        label: "Potential Smart Money"
+
+
+      };
+
+
 
       setAnalysis({
 
-  ...analysis,
+        ...analysis,
 
-  wallet: result
+        wallet: walletData
 
-});
+      });
 
 
-    } catch(error) {
 
-      console.log(error);
+    }
+
+    finally {
+
+
+      setLoading(false);
+
 
     }
 
 
-    setLoading(false);
-
   }
+
+
+
+
+
+  const walletData =
+    analysis?.wallet;
+
+
 
 
 
@@ -62,116 +97,131 @@ export default function WhaleTracker() {
 
 
       <h2 className="text-2xl font-bold">
+
         🐋 Smart Money Whale Tracker
+
       </h2>
 
 
-      <p className="mt-3 text-gray-400">
-        Track Solana wallets and analyze
-        smart money activity.
-      </p>
 
 
-
-      <div className="flex flex-col md:flex-row gap-4 mt-6">
-
-
-        <input
-
-          value={wallet}
-
-          onChange={(e)=>
-            setWallet(e.target.value)
-          }
-
-          placeholder="Paste Solana Wallet Address"
-
-          className="flex-1 p-4 rounded-xl bg-black border border-white/20"
-
-        />
+      <input
 
 
-
-        <button
-
-          onClick={trackWallet}
-
-          className="px-6 py-3 rounded-xl bg-white text-black font-bold"
-
-        >
-
-          {loading
-          ? "Tracking..."
-          : "Track Wallet"}
-
-        </button>
+        value={wallet}
 
 
-      </div>
+        onChange={(e)=>setWallet(e.target.value)}
+
+
+        placeholder="Enter wallet address"
+
+
+        className="mt-5 w-full rounded-xl bg-black/40 border border-white/20 px-4 py-3"
+
+
+      />
 
 
 
 
-      {data && (
 
-        <div className="mt-8 border border-white/10 rounded-xl p-5">
-
-
-          <h3 className="text-xl font-bold">
-            Wallet Intelligence
-          </h3>
+      <button
 
 
+        onClick={analyzeWallet}
 
-          <div className="mt-5 space-y-3 text-gray-300">
+
+        className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition"
 
 
-            <p>
-              Wallet:
-              {data.wallet}
-            </p>
+      >
+
+        {loading ? "Analyzing..." : "Analyze Wallet"}
+
+      </button>
 
 
 
-            <p>
-              SOL Balance:
-              {data.balance}
-              SOL
-            </p>
 
 
 
-            <p>
-              Recent Transactions:
-              {data.transactions}
-            </p>
+      {!walletData && (
+
+
+        <p className="mt-5 text-gray-400">
+
+          Waiting for wallet analysis...
+
+        </p>
+
+
+      )}
 
 
 
-            <p>
-              Smart Money Score:
-
-              <span className="gradient-text font-bold">
-                {data.smartMoneyScore}/100
-                <p>
- Status:
-
- <span className="text-green-400">
- {data.smartMoneyStatus}
- </span>
-
-</p>
-              </span>
-
-            </p>
 
 
-          </div>
+
+
+      {walletData && (
+
+
+        <div className="mt-6 space-y-3 text-gray-300">
+
+
+
+          <p>
+
+            Wallet:
+
+            <span className="ml-2">
+
+              {walletData.address}
+
+            </span>
+
+          </p>
+
+
+
+
+
+          <p>
+
+            Status:
+
+            <span className="ml-2 text-green-400">
+
+              {walletData.label}
+
+            </span>
+
+          </p>
+
+
+
+
+
+          <p>
+
+            Smart Money Score:
+
+            <span className="ml-2 gradient-text font-bold">
+
+              {walletData.smartMoneyScore}/100
+
+            </span>
+
+          </p>
+
 
 
         </div>
 
+
       )}
+
 
 
     </div>
