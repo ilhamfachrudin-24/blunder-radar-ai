@@ -144,6 +144,14 @@ export default function WhaleTracker() {
 
               <span className="gradient-text font-bold">
                 {data.smartMoneyScore}/100
+                <p>
+ Status:
+
+ <span className="text-green-400">
+ {data.smartMoneyStatus}
+ </span>
+
+</p>
               </span>
 
             </p>
