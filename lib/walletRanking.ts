@@ -1,7 +1,19 @@
-export function rankWallets(wallets:any[]) {
+import { 
+  calculateSmartMoneyScore 
+} from "./smartMoneyScore";
 
 
-  if (!wallets || wallets.length === 0) {
+
+export function rankWallets(
+  wallets:any[]
+){
+
+
+
+  if(
+    !wallets ||
+    wallets.length === 0
+  ){
 
     return [];
 
@@ -9,110 +21,96 @@ export function rankWallets(wallets:any[]) {
 
 
 
-  const ranked = wallets.map((wallet)=>{
 
 
-    let score = 50;
 
 
+  const ranked =
 
-    const balance =
+    wallets.map((wallet)=>{
 
-      Number(wallet.balance || 0);
 
 
 
-    const transactions =
 
-      Number(wallet.transactions || 0);
+      const analysis =
 
+        calculateSmartMoneyScore({
 
 
+          balance:
 
+            wallet.balance || 0,
 
-    if(balance > 100){
 
-      score += 20;
 
-    }
+          transactions:
 
+            wallet.transactions || 0
 
 
-    if(transactions > 20){
 
-      score += 20;
+        });
 
-    }
 
 
 
 
-    if(score > 100){
 
-      score = 100;
 
-    }
 
 
+      return {
 
 
+        wallet:
 
-    let label =
+          wallet.address || wallet.wallet,
 
-      "Normal Wallet";
 
 
+        balance:
 
+          Number(
+            wallet.balance || 0
+          ),
 
-    if(score >= 80){
 
-      label =
-      "🔥 Smart Money";
 
-    }
 
-    else if(score >= 60){
+        transactions:
 
-      label =
-      "👀 Active Trader";
+          Number(
+            wallet.transactions || 0
+          ),
 
-    }
 
 
 
 
+        smartMoneyScore:
 
+          analysis.smartMoneyScore,
 
 
-    return {
 
 
-      wallet:
 
-      wallet.address,
+        label:
 
+          analysis.status
 
 
-      balance,
 
+      };
 
 
-      transactions,
 
+    });
 
 
-      score,
 
 
-
-      label
-
-
-    };
-
-
-
-  });
 
 
 
@@ -122,9 +120,12 @@ export function rankWallets(wallets:any[]) {
 
     (a,b)=>
 
-      b.score - a.score
+      b.smartMoneyScore -
+
+      a.smartMoneyScore
 
   );
+
 
 
 }
