@@ -2,13 +2,15 @@ import "./globals.css";
 
 import { AnalysisProvider } from "@/context/AnalysisContext";
 
+import type { Metadata } from "next";
 
-export const metadata = {
+
+export const metadata: Metadata = {
 
   title: "🔥 Blunder Radar AI",
 
   description:
-    "AI-powered Solana intelligence platform for token analysis, smart money tracking, and Web3 research.",
+    "AI-powered Solana intelligence platform for token analysis, smart money tracking, security analysis, and Web3 research.",
 
 };
 
@@ -30,7 +32,7 @@ export default function RootLayout({
     <html lang="en">
 
 
-      <body>
+      <body suppressHydrationWarning>
 
 
         <AnalysisProvider>
