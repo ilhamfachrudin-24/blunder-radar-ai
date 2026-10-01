@@ -5,6 +5,7 @@ import { useAnalysis } from "@/context/AnalysisContext";
 import Loading from "@/components/Loading";
 import { calculateRiskScore } from "@/lib/riskEngine";
 import { calculateBlunderScore } from "@/lib/blunderScore";
+import { calculateHolderScore } from "@/lib/holderAnalysis";
 
 
 export default function TokenScanner() {
@@ -17,6 +18,7 @@ export default function TokenScanner() {
 
 
 
+
   const [token, setToken] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -24,6 +26,7 @@ export default function TokenScanner() {
   const [error, setError] = useState("");
 
   const [result, setResult] = useState<any>(null);
+
 
 
 
@@ -53,12 +56,12 @@ export default function TokenScanner() {
 
 
 
-
       const response = await fetch(
 
         `https://api.dexscreener.com/latest/dex/tokens/${token}`
 
       );
+
 
 
 
@@ -73,12 +76,10 @@ export default function TokenScanner() {
 
         setError("Token data not found");
 
-
         return;
 
 
       }
-
 
 
 
@@ -91,6 +92,17 @@ export default function TokenScanner() {
 
 
       const risk = calculateRiskScore(data);
+
+
+
+
+
+      const holder = calculateHolderScore({
+
+        holders: market?.holders || 0
+
+      });
+
 
 
 
@@ -113,6 +125,7 @@ export default function TokenScanner() {
 
 
 
+
       const smartMoneyScore =
 
         analysis?.wallet?.smartMoneyScore || 50;
@@ -122,14 +135,9 @@ export default function TokenScanner() {
 
 
 
-      const holderScore = 50;
-
-
-
-
-
 
       const blunder = calculateBlunderScore({
+
 
 
         riskScore: risk.score,
@@ -138,10 +146,11 @@ export default function TokenScanner() {
         securityScore: security.securityScore,
 
 
-        holderScore,
+        holderScore: holder.holderScore,
 
 
         smartMoneyScore
+
 
 
       });
@@ -152,7 +161,9 @@ export default function TokenScanner() {
 
 
 
+
       const analysisData = {
+
 
 
         market,
@@ -161,18 +172,17 @@ export default function TokenScanner() {
         tokenAddress: token,
 
 
+
         risk,
+
 
 
         security,
 
 
-        holders: {
 
+        holders: holder,
 
-          holderScore
-
-        },
 
 
         wallet: {
@@ -180,13 +190,17 @@ export default function TokenScanner() {
 
           smartMoneyScore
 
+
         },
+
 
 
         finalRating: blunder
 
 
+
       };
+
 
 
 
@@ -202,8 +216,8 @@ export default function TokenScanner() {
 
 
 
-
     }
+
 
 
     catch(error){
@@ -213,6 +227,7 @@ export default function TokenScanner() {
 
 
     }
+
 
 
 
@@ -271,7 +286,6 @@ export default function TokenScanner() {
 
 
 
-
       <button
 
 
@@ -316,7 +330,6 @@ export default function TokenScanner() {
 
       {result && (
 
-
         <div className="mt-8 space-y-3">
 
 
@@ -325,7 +338,6 @@ export default function TokenScanner() {
             Token Result
 
           </h3>
-
 
 
 
@@ -339,6 +351,7 @@ export default function TokenScanner() {
               {result.baseToken?.name}
 
             </span>
+
 
           </p>
 
@@ -356,6 +369,7 @@ export default function TokenScanner() {
 
             </span>
 
+
           </p>
 
 
@@ -372,9 +386,8 @@ export default function TokenScanner() {
 
             </span>
 
+
           </p>
-
-
 
 
 
@@ -382,7 +395,6 @@ export default function TokenScanner() {
 
 
       )}
-
 
 
 
