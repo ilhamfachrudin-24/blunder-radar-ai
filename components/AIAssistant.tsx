@@ -8,25 +8,27 @@ export default function AIAssistant() {
 
 
   const {
-
     analysis
-
   } = useAnalysis();
 
 
 
-
-  const [report, setReport] = useState("");
-
-  const [loading, setLoading] = useState(false);
+  const [report,setReport] =
+    useState("");
 
 
 
+  const [loading,setLoading] =
+    useState(false);
 
 
 
 
-  function generateReport() {
+
+
+
+  function generateReport(){
+
 
 
     setLoading(true);
@@ -34,14 +36,16 @@ export default function AIAssistant() {
 
 
 
+    setTimeout(()=>{
 
-    setTimeout(() => {
+
 
 
 
       const risk =
 
         analysis?.risk?.score || 50;
+
 
 
 
@@ -66,10 +70,24 @@ export default function AIAssistant() {
 
 
 
-      const finalScore =
 
-        analysis?.finalRating?.score || 50;
 
+
+      const finalScore = Math.round(
+
+        (
+
+          risk +
+
+          security +
+
+          holder +
+
+          smartMoney
+
+        ) / 4
+
+      );
 
 
 
@@ -79,32 +97,34 @@ export default function AIAssistant() {
 
       let conclusion =
 
-        "Token requires deeper research before entering.";
+        "High risk signal. Always perform additional research before making decisions.";
 
 
 
 
 
 
-      if (finalScore >= 80) {
 
-
-        conclusion =
-
-        "Token shows strong indicators based on current analysis.";
-
-
-      }
-
-      else if (finalScore >= 60) {
+      if(finalScore >= 80){
 
 
         conclusion =
 
-        "Token has moderate potential but requires monitoring.";
-
+        "Strong research signal detected. Token metrics show positive indicators, but market risk remains.";
 
       }
+
+
+
+      else if(finalScore >=60){
+
+
+        conclusion =
+
+        "Moderate research signal. Monitor liquidity, holders, and smart money activity.";
+
+      }
+
 
 
 
@@ -115,39 +135,59 @@ export default function AIAssistant() {
 
       const text = `
 
+
 🔥 BLUNDER RADAR AI REPORT
 
 
-Risk Score:
+━━━━━━━━━━━━━━━━
+
+
+📊 Risk Score
+
 ${risk}/100
 
 
-Security Score:
+
+🛡 Security Score
+
 ${security}/100
 
 
-Holder Score:
+
+👥 Holder Score
+
 ${holder}/100
 
 
-Smart Money Score:
+
+🐋 Smart Money Score
+
 ${smartMoney}/100
 
 
 
-Final Blunder Rating:
+
+🔥 Final Blunder Rating
 
 ${finalScore}/100
 
 
 
-AI Conclusion:
+
+🤖 AI Conclusion:
+
 
 ${conclusion}
 
 
-      `;
 
+
+⚠️ Disclaimer:
+
+This analysis is for research purposes only, not financial advice.
+
+
+`;
 
 
 
@@ -162,8 +202,8 @@ ${conclusion}
 
 
 
-    },1000);
 
+    },1000);
 
 
 
@@ -183,6 +223,7 @@ ${conclusion}
     <div className="card mt-10">
 
 
+
       <h2 className="text-2xl font-bold">
 
         🤖 AI Research Assistant
@@ -193,12 +234,16 @@ ${conclusion}
 
 
 
+
+
       <p className="mt-4 text-gray-400">
 
         AI analyzes token fundamentals,
-        security, holders, and smart money.
+        security, holders, liquidity,
+        and smart money signals.
 
       </p>
+
 
 
 
@@ -217,7 +262,14 @@ ${conclusion}
 
       >
 
-        {loading ? "Generating..." : "Generate Report"}
+
+        {loading
+
+        ? "Generating..."
+
+        : "Generate Report"}
+
+
 
       </button>
 
@@ -231,7 +283,12 @@ ${conclusion}
       {report && (
 
 
-        <pre className="mt-6 rounded-xl bg-black p-5 text-green-400 whitespace-pre-wrap">
+
+        <pre
+
+        className="mt-6 rounded-xl bg-black p-5 text-green-400 whitespace-pre-wrap"
+
+        >
 
 
           {report}
@@ -240,9 +297,8 @@ ${conclusion}
         </pre>
 
 
+
       )}
-
-
 
 
 
