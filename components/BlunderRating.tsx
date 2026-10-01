@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 
 
@@ -9,112 +8,51 @@ export default function BlunderRating() {
 
   const {
 
-    analysis,
-
-    setAnalysis
+    analysis
 
   } = useAnalysis();
 
 
 
 
+  const rating =
+
+    analysis?.finalRating || {
+
+
+      score: 50,
+
+      status: "Waiting Analysis"
+
+
+    };
+
+
+
+
+
+
   const risk =
+
     analysis?.risk?.score || 50;
 
 
 
   const security =
+
     analysis?.security?.securityScore || 50;
 
 
 
   const holder =
+
     analysis?.holders?.holderScore || 50;
 
 
 
   const smartMoney =
+
     analysis?.wallet?.smartMoneyScore || 50;
-
-
-
-
-
-  const score = Math.round(
-
-    (
-
-      risk +
-
-      security +
-
-      holder +
-
-      smartMoney
-
-    ) / 4
-
-  );
-
-
-
-
-
-
-  let status = "Analyzing";
-
-
-
-  if (score >= 80) {
-
-
-    status = "Strong Research Signal";
-
-
-  }
-
-  else if (score >= 60) {
-
-
-    status = "Moderate Signal";
-
-
-  }
-
-  else {
-
-
-    status = "High Risk Signal";
-
-
-  }
-
-
-
-
-
-
-
-  useEffect(() => {
-
-
-    setAnalysis({
-
-      ...analysis,
-
-      finalRating: {
-
-        score,
-
-        status
-
-      }
-
-    });
-
-
-
-  }, [score]);
 
 
 
@@ -140,11 +78,10 @@ export default function BlunderRating() {
 
       <div className="mt-6 text-6xl font-bold gradient-text">
 
-
-        {score}/100
-
+        {rating.score}/100
 
       </div>
+
 
 
 
@@ -158,12 +95,13 @@ export default function BlunderRating() {
 
         <span className="ml-2 text-white font-bold">
 
-          {status}
+          {rating.status}
 
         </span>
 
 
       </p>
+
 
 
 
@@ -177,7 +115,7 @@ export default function BlunderRating() {
 
           Risk
 
-          <br/>
+          <br />
 
           {risk}/100
 
@@ -191,7 +129,7 @@ export default function BlunderRating() {
 
           Security
 
-          <br/>
+          <br />
 
           {security}/100
 
@@ -205,7 +143,7 @@ export default function BlunderRating() {
 
           Holder
 
-          <br/>
+          <br />
 
           {holder}/100
 
@@ -219,7 +157,7 @@ export default function BlunderRating() {
 
           Smart Money
 
-          <br/>
+          <br />
 
           {smartMoney}/100
 
