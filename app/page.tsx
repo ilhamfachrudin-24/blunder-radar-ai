@@ -8,6 +8,7 @@ import AIAssistant from "@/components/AIAssistant";
 import BlunderRating from "@/components/BlunderRating";
 import { useAnalysis } from "@/context/AnalysisContext";
 import Navbar from "@/components/Navbar";
+import About from "@/components/About";
 
 
 export default function Home() {
@@ -208,6 +209,11 @@ export default function Home() {
       </section>
 
 
+
+
+      {/* ABOUT BUILDER */}
+
+      <About />
 
 
 
