@@ -5,19 +5,47 @@ import { useState } from "react";
 export default function TokenScanner() {
 
   const [address, setAddress] = useState("");
-  const [result, setResult] = useState(false);
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
 
-  function analyzeToken() {
+  async function analyzeToken() {
 
     if (!address) return;
 
-    setResult(true);
+    setLoading(true);
+
+
+    try {
+
+      const response = await fetch(
+        `/api/token?address=${address}`
+      );
+
+
+      const result = await response.json();
+
+
+      setData(result);
+
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+
+    setLoading(false);
 
   }
 
 
+  const pair = data?.pairs?.[0];
+
+
   return (
+
     <div className="card mt-10">
 
       <h2 className="text-2xl font-bold">
@@ -26,9 +54,10 @@ export default function TokenScanner() {
 
 
       <p className="mt-3 text-gray-400">
-        Enter Solana token address to analyze
-        liquidity, risk, and market activity.
+        Analyze Solana token market data using
+        DexScreener.
       </p>
+
 
 
       <div className="flex flex-col md:flex-row gap-4 mt-6">
@@ -38,9 +67,7 @@ export default function TokenScanner() {
 
           value={address}
 
-          onChange={(e) =>
-            setAddress(e.target.value)
-          }
+          onChange={(e)=>setAddress(e.target.value)}
 
           placeholder="Paste Solana Token Address"
 
@@ -57,7 +84,7 @@ export default function TokenScanner() {
 
         >
 
-          Analyze
+          {loading ? "Scanning..." : "Analyze"}
 
         </button>
 
@@ -66,47 +93,53 @@ export default function TokenScanner() {
 
 
 
-      {result && (
 
-        <div className="mt-8 border border-white/10 rounded-xl p-5">
+      {pair && (
+
+        <div className="mt-8 card">
 
 
           <h3 className="text-xl font-bold">
-            Analysis Result
+            Token Result
           </h3>
 
 
-          <div className="mt-4 space-y-3 text-gray-300">
+          <div className="mt-5 space-y-3 text-gray-300">
 
 
             <p>
-              Token Address:
-              <br />
-              {address}
+              Pair:
+              {pair.baseToken?.name}
+            </p>
+
+
+            <p>
+              Symbol:
+              {pair.baseToken?.symbol}
+            </p>
+
+
+            <p>
+              Price:
+              ${pair.priceUsd}
             </p>
 
 
             <p>
               Liquidity:
-              <span className="text-green-400">
-                Healthy
-              </span>
+              ${pair.liquidity?.usd}
             </p>
 
 
             <p>
-              Holder Activity:
-              <span className="text-green-400">
-                Increasing
-              </span>
+              Volume 24h:
+              ${pair.volume?.h24}
             </p>
 
 
             <p>
-              Blunder AI Score:
-              <span className="gradient-text font-bold">
-                82/100
-              </span>
+              DEX:
+              {pair.dexId}
             </p>
 
 
@@ -119,5 +152,7 @@ export default function TokenScanner() {
 
 
     </div>
+
   );
+
 }
