@@ -1,191 +1,275 @@
 "use client";
 
 import { useState } from "react";
-import { calculateRiskScore } from "@/lib/riskEngine";
 import { useAnalysis } from "@/context/AnalysisContext";
-import { calculateRiskScore } from "@/lib/riskEngine";
+import Loading from "@/components/Loading";
+
 
 export default function TokenScanner() {
 
-  const [address, setAddress] = useState(""); const { setAnalysis } = useAnalysis();
-  const [data, setData] = useState<any>(null);
+
+  const {
+
+    setAnalysis
+
+  } = useAnalysis();
+
+
+
+  const [token, setToken] = useState("");
+
   const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState("");
+
+  const [result, setResult] = useState<any>(null);
+
+
 
 
   async function analyzeToken() {
 
-    if (!address) return;
 
-    setLoading(true);
+    if (!token) {
 
+      setError("Please enter token address");
 
-    try {
-
-      const response = await fetch(
-        `/api/token?address=${address}`
-      );
-
-
-      const result = await response.json(); setAnalysis({
-
-  market: result,
-
-  risk: risk
-
-});
-
-
-      const risk =
-  calculateRiskScore(result);
-
-      
-      setData(result);
-
-
-    } catch (error) {
-
-      console.log(error);
+      return;
 
     }
 
 
-    setLoading(false);
+
+    try {
+
+
+      setLoading(true);
+
+      setError("");
+
+
+
+      const response = await fetch(
+
+        `https://api.dexscreener.com/latest/dex/tokens/${token}`
+
+      );
+
+
+
+      const data = await response.json();
+
+
+
+      if (!data.pairs || data.pairs.length === 0) {
+
+
+        setError("Token data not found");
+
+
+        setLoading(false);
+
+
+        return;
+
+      }
+
+
+
+
+      const market = data.pairs[0];
+
+
+
+      const analysisData = {
+
+
+        market,
+
+        tokenAddress: token
+
+
+      };
+
+
+
+      setResult(market);
+
+
+
+      setAnalysis(analysisData);
+
+
+
+    }
+
+    catch(error){
+
+
+      setError("Failed to analyze token");
+
+
+    }
+
+
+    finally {
+
+
+      setLoading(false);
+
+
+    }
+
 
   }
 
 
-  const pair = data?.pairs?.[0];
-  const risk = data ? calculateRiskScore(data) : null;
+
 
 
   return (
 
-    <div className="card mt-10">
+
+    <div className="card mt-6">
+
 
       <h2 className="text-2xl font-bold">
-        Token Scanner
+
+        🔍 Token Scanner
+
       </h2>
 
 
-      <p className="mt-3 text-gray-400">
-        Analyze Solana token market data using
-        DexScreener.
-      </p>
 
 
-
-      <div className="flex flex-col md:flex-row gap-4 mt-6">
-
-
-        <input
-
-          value={address}
-
-          onChange={(e)=>setAddress(e.target.value)}
-
-          placeholder="Paste Solana Token Address"
-
-          className="flex-1 p-4 rounded-xl bg-black border border-white/20"
-
-        />
+      <input
 
 
-        <button
-
-          onClick={analyzeToken}
-
-          className="px-6 py-3 rounded-xl bg-white text-black font-bold"
-
-        >
-
-          {loading ? "Scanning..." : "Analyze"}
-
-        </button>
+        value={token}
 
 
-      </div>
+        onChange={(e)=>setToken(e.target.value)}
+
+
+        placeholder="Enter Solana token address"
+
+
+        className="mt-5 w-full rounded-xl bg-black/40 border border-white/20 px-4 py-3"
+
+
+      />
 
 
 
 
-      {pair && (
 
-        <div className="mt-8 card">
-
-
-          <h3 className="text-xl font-bold">
-            Token Result
-          </h3>
+      <button
 
 
-          <div className="mt-5 space-y-3 text-gray-300">
+        onClick={analyzeToken}
 
 
-            <p>
-              Pair:
-              {pair.baseToken?.name}
-            </p>
+        className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold hover:scale-105 transition"
 
 
-            <p>
-              Symbol:
-              {pair.baseToken?.symbol}
-            </p>
+      >
+
+        Analyze Token
+
+      </button>
 
 
-            <p>
-              Price:
-              ${pair.priceUsd}
-            </p>
 
 
-            <p>
-              Liquidity:
-              ${pair.liquidity?.usd}
-            </p>
+
+      {loading && <Loading />}
 
 
-            <p>
-              Volume 24h:
-              ${pair.volume?.h24}
-            </p>
 
 
-            <p>
-              DEX:
-              {pair.dexId}
-            </p>
 
-            <div className="mt-6 border-t border-white/10 pt-5">
+      {error && (
 
-<h3 className="text-xl font-bold">
-Blunder AI Rating
-</h3>
+        <p className="mt-5 text-red-400">
 
+          {error}
 
-<p className="text-4xl gradient-text font-bold mt-3">
-{risk?.score}/100
-</p>
-
-
-<p className="mt-2 text-gray-300">
-Risk Level:
-{risk?.level}
-</p>
-
-
-</div>
-
-
-          </div>
-
-
-        </div>
+        </p>
 
       )}
 
 
+
+
+
+
+      {result && (
+
+
+        <div className="mt-8 space-y-3">
+
+
+          <h3 className="text-xl font-bold">
+
+            Token Result
+
+          </h3>
+
+
+
+          <p>
+
+            Pair:
+
+            <span className="text-gray-400 ml-2">
+
+              {result.baseToken?.name}
+
+            </span>
+
+          </p>
+
+
+
+
+          <p>
+
+            Price:
+
+            <span className="text-gray-400 ml-2">
+
+              ${result.priceUsd}
+
+            </span>
+
+          </p>
+
+
+
+
+          <p>
+
+            Liquidity:
+
+            <span className="text-gray-400 ml-2">
+
+              ${result.liquidity?.usd}
+
+            </span>
+
+          </p>
+
+
+
+        </div>
+
+
+      )}
+
+
+
     </div>
+
 
   );
 
