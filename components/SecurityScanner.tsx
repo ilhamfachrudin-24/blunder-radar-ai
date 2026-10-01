@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect } from "react";
+import { useAnalysis } from "@/context/AnalysisContext";
+import { checkSolanaSecurity } from "@/lib/solanaSecurity";
+
 type SecurityProps = {
   data?: any;
 };
@@ -5,7 +11,9 @@ type SecurityProps = {
 
 export default function SecurityScanner({
   data
-}: SecurityProps) {
+}: Props) {
+
+  const { analysis, setAnalysis } = useAnalysis();
 
   return (
 
@@ -46,6 +54,38 @@ export default function SecurityScanner({
 
     </div>
 
+
+    useEffect(() => {
+
+  async function runSecurityCheck() {
+
+    const address =
+      analysis?.market?.pairs?.[0]?.baseToken?.address;
+
+
+    if (!address) return;
+
+
+    const security =
+      await checkSolanaSecurity(address);
+
+
+    setAnalysis({
+
+      ...analysis,
+
+      security
+
+    });
+
+
+  }
+
+
+  runSecurityCheck();
+
+
+}, [analysis?.market]);
   );
 
 }
