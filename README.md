@@ -1,128 +1,49 @@
-# 🚀 Blunder Radar AI
+# 🔥 Blunder Radar AI
 
-AI-powered Solana memecoin analysis platform designed to help Web3 traders research tokens, analyze risks, and monitor smart money activity.
-
-![Blunder Radar AI](https://img.shields.io/badge/Web3-Solana-purple)
-![AI Powered](https://img.shields.io/badge/AI-Powered-blue)
-![Status](https://img.shields.io/badge/Status-MVP-green)
+## AI-Powered Solana Intelligence Platform
 
 
-## 🌐 Overview
+Blunder Radar AI is a Web3 analytics platform designed to help crypto researchers and traders analyze Solana tokens, track smart money activity, and evaluate market risks using AI-powered intelligence.
 
-Blunder Radar AI is a Web3 research tool that combines blockchain data, AI analysis, and market intelligence to help users understand Solana ecosystem tokens.
 
-The platform focuses on:
 
-- Token analysis
+## 🚀 Features
+
+
+### 🔍 Token Intelligence
+
+- Token market analysis
 - Liquidity monitoring
-- Risk assessment
-- Smart money tracking
-- AI-powered insights
+- Trading activity insights
+- Market signal detection
 
 
-## ✨ Features
+### 🛡️ Security Analysis
 
-### 🔍 Token Scanner
-
-Analyze Solana tokens using market data:
-
-- Token information
-- Trading pair
-- Liquidity
-- Volume
-- DEX information
+- Token security evaluation
+- Mint authority checking
+- Freeze authority monitoring
+- Risk identification
 
 
-### 🛡️ Risk Scanner
+### 🐋 Smart Money Intelligence
 
-Evaluate potential risks:
-
-- Liquidity condition
-- Trading activity
-- Risk score
-- AI-based evaluation
+- Wallet activity tracking
+- Whale behavior analysis
+- Smart money scoring
 
 
-### 🐋 Smart Money Whale Tracker
+### 🤖 AI Analysis Engine
 
-Monitor wallet activity:
-
-- Whale wallet tracking
-- Smart money research
-- Transaction monitoring
-
-
-### 🤖 Blunder AI Assistant
-
-Provides automated insights:
-
-- Market summary
-- Risk explanation
-- Trading research assistance
+- Risk scoring
+- Holder analysis
+- Security evaluation
+- Final Blunder AI Rating
 
 
-## 🛠️ Technology Stack
 
-Frontend:
-
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
+## ⭐ Blunder AI Rating
 
 
-Blockchain:
+The platform combines multiple indicators:
 
-- Solana Ecosystem
-- SPL Token
-- DEX Data
-
-
-APIs:
-
-- DexScreener API
-
-
-Development Tools:
-
-- GitHub
-- VS Code
-- AI-assisted coding
-
-
-## 📌 Roadmap
-
-### Phase 1 ✅
-- Dashboard UI
-- Token Scanner
-- Risk Engine
-- AI Insight System
-
-
-### Phase 2 🚧
-- Solana RPC Integration
-- Real Wallet Tracking
-- Holder Analysis
-- Security Scanner
-
-
-### Phase 3 🔮
-- Advanced AI Trading Assistant
-- Smart Money Alerts
-- Automated Monitoring
-
-
-## ⚠️ Disclaimer
-
-Blunder Radar AI is a research and analysis tool.
-
-It does not provide financial advice and users should always perform their own research before making investment decisions.
-
-
-## 👨‍💻 Builder
-
-Created by:
-
-**Ahmad Ilham Fachrudin Nur Yahya**
-
-Web3 Builder | Solana Ecosystem | AI & Blockchain Developer
