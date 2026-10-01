@@ -1,19 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
 import { useAnalysis } from "@/context/AnalysisContext";
 
 
-export default function BlunderRating() {
+
+export default function BlunderRating(){
+
 
 
   const {
-
-    analysis,
-
-    setAnalysis
-
+    analysis
   } = useAnalysis();
+
 
 
 
@@ -22,7 +20,6 @@ export default function BlunderRating() {
   const risk =
 
     analysis?.risk?.score || 50;
-
 
 
 
@@ -40,6 +37,7 @@ export default function BlunderRating() {
 
 
 
+
   const smartMoney =
 
     analysis?.wallet?.smartMoneyScore || 50;
@@ -50,84 +48,22 @@ export default function BlunderRating() {
 
 
 
-  const score = Math.round(
 
-    (
+  const rating =
 
-      risk +
-
-      security +
-
-      holder +
-
-      smartMoney
-
-    ) / 4
-
-  );
+    analysis?.finalRating || {
 
 
+      score:50,
 
 
+      status:
+      "Waiting Analysis"
 
 
-
-  let status =
-
-    "High Risk Signal";
+    };
 
 
-
-
-
-  if(score >= 80){
-
-
-    status =
-      "Strong Research Signal";
-
-
-  }
-
-  else if(score >=60){
-
-
-    status =
-      "Moderate Signal";
-
-
-  }
-
-
-
-
-
-
-  useEffect(()=>{
-
-
-    setAnalysis((prev:any)=>({
-
-
-      ...prev,
-
-
-      finalRating:{
-
-
-        score,
-
-
-        status
-
-
-      }
-
-
-    }));
-
-
-  },[score]);
 
 
 
@@ -139,7 +75,11 @@ export default function BlunderRating() {
   return (
 
 
+
     <div className="card mt-10 glow">
+
+
+
 
 
 
@@ -158,11 +98,10 @@ export default function BlunderRating() {
       <div className="mt-6 text-6xl font-bold gradient-text">
 
 
-        {score}/100
+        {rating.score}/100
 
 
       </div>
-
 
 
 
@@ -178,12 +117,44 @@ export default function BlunderRating() {
 
         <span className="ml-2 text-white font-bold">
 
-          {status}
+
+          {rating.status}
+
 
         </span>
 
 
       </p>
+
+
+
+
+
+
+
+
+      <div className="mt-6 w-full bg-white/10 rounded-full h-3">
+
+
+        <div
+
+
+          className="h-3 rounded-full bg-white transition-all"
+
+
+          style={{
+
+            width:
+            `${rating.score}%`
+
+          }}
+
+
+        />
+
+
+
+      </div>
 
 
 
@@ -199,9 +170,10 @@ export default function BlunderRating() {
 
 
 
+
         <div className="card">
 
-          Risk
+          ⚠️ Risk
 
           <br/>
 
@@ -215,9 +187,10 @@ export default function BlunderRating() {
 
 
 
+
         <div className="card">
 
-          Security
+          🛡 Security
 
           <br/>
 
@@ -231,9 +204,10 @@ export default function BlunderRating() {
 
 
 
+
         <div className="card">
 
-          Holder
+          👥 Holder
 
           <br/>
 
@@ -247,9 +221,10 @@ export default function BlunderRating() {
 
 
 
+
         <div className="card">
 
-          Smart Money
+          🐋 Smart Money
 
           <br/>
 
@@ -261,7 +236,9 @@ export default function BlunderRating() {
 
 
 
+
       </div>
+
 
 
 
