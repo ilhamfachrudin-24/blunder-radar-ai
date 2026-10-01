@@ -7,8 +7,7 @@ import {
 } from "react";
 
 
-const AnalysisContext =
-createContext<any>(null);
+const AnalysisContext = createContext<any>(null);
 
 
 
@@ -19,8 +18,8 @@ export function AnalysisProvider({
 }) {
 
 
-  const [analysis,setAnalysis] =
-  useState(null);
+  const [analysis, setAnalysis] =
+    useState<any>({});
 
 
 
@@ -45,10 +44,9 @@ export function AnalysisProvider({
 
 
 
-export function useAnalysis(){
 
-  return useContext(
-    AnalysisContext
-  );
+export function useAnalysis() {
+
+  return useContext(AnalysisContext);
 
 }
