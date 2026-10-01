@@ -1,131 +1,87 @@
-import { 
-  calculateSmartMoneyScore 
-} from "./smartMoneyScore";
+export function rankWallets(wallets:any[]){
 
-
-
-export function rankWallets(
-  wallets:any[]
-){
-
-
-
-  if(
-    !wallets ||
-    wallets.length === 0
-  ){
+  if(!wallets || wallets.length===0){
 
     return [];
 
   }
 
 
+  return wallets.map((wallet)=>{
 
 
+    let score = 50;
 
 
+    const balance =
+      Number(wallet.amount || wallet.balance || 0);
 
-  const ranked =
 
-    wallets.map((wallet)=>{
+    if(balance > 100){
 
+      score +=25;
 
+    }
+    else if(balance > 20){
 
+      score +=10;
 
+    }
 
-      const analysis =
 
-        calculateSmartMoneyScore({
 
+    if(score >100){
 
-          balance:
+      score =100;
 
-            wallet.balance || 0,
+    }
 
 
 
-          transactions:
+    let label =
+      "Normal Wallet";
 
-            wallet.transactions || 0
 
+    if(score>=80){
 
+      label="🔥 Smart Money";
 
-        });
+    }
+    else if(score>=60){
 
+      label="👀 Active Trader";
 
+    }
 
 
 
+    return {
 
 
+      wallet:
+        wallet.address,
 
 
-      return {
+      balance,
 
 
-        wallet:
+      score,
 
-          wallet.address || wallet.wallet,
 
+      label,
 
 
-        balance:
+      smartMoneyScore:
+        score
 
-          Number(
-            wallet.balance || 0
-          ),
 
+    };
 
 
-
-        transactions:
-
-          Number(
-            wallet.transactions || 0
-          ),
-
-
-
-
-
-        smartMoneyScore:
-
-          analysis.smartMoneyScore,
-
-
-
-
-
-        label:
-
-          analysis.status
-
-
-
-      };
-
-
-
-    });
-
-
-
-
-
-
-
-
-
-  return ranked.sort(
-
+  })
+  .sort(
     (a,b)=>
-
-      b.smartMoneyScore -
-
-      a.smartMoneyScore
-
+    b.score-a.score
   );
-
-
 
 }
