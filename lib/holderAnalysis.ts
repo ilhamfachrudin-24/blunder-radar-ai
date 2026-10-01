@@ -10,15 +10,28 @@ export function calculateHolderScore(
   const holders =
 
     Number(
-      data?.holders || 0
+
+      data?.holders ||
+
+      data?.wallets?.length ||
+
+      0
+
     );
 
 
 
-  const topHolderPercent =
+
+
+
+  let topHolderPercent =
 
     Number(
-      data?.topHolderPercent || 0
+
+      data?.topHolderPercent ||
+
+      0
+
     );
 
 
@@ -27,10 +40,50 @@ export function calculateHolderScore(
 
 
 
-  // Holder distribution
+
+  // Calculate whale concentration automatically
 
 
-  if(holders >=10000){
+  if(
+
+    data?.wallets &&
+
+    data.wallets.length > 0
+
+  ){
+
+
+
+    const topHolder =
+
+      data.wallets[0];
+
+
+
+    topHolderPercent =
+
+      Number(
+
+        topHolder.percentage || 0
+
+      );
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+  // Holder amount analysis
+
+
+  if(holders >= 10000){
 
 
     score +=30;
@@ -62,13 +115,24 @@ export function calculateHolderScore(
 
 
 
-  // Whale concentration
+
+
+  // Whale concentration risk
 
 
   if(topHolderPercent >30){
 
 
-    score -=20;
+    score -=25;
+
+
+  }
+
+
+  else if(topHolderPercent >20){
+
+
+    score -=15;
 
 
   }
@@ -88,19 +152,29 @@ export function calculateHolderScore(
 
 
 
+
+
   if(score >100){
 
-    score=100;
+
+    score = 100;
+
 
   }
+
+
+
 
 
 
   if(score <0){
 
-    score=0;
+
+    score = 0;
+
 
   }
+
 
 
 
@@ -112,6 +186,8 @@ export function calculateHolderScore(
   let holderStatus =
 
     "High Concentration Risk";
+
+
 
 
 
@@ -159,16 +235,35 @@ export function calculateHolderScore(
     metrics:{
 
 
+
       holders,
 
 
-      topHolderPercent
+
+      topHolderPercent,
+
+
+
+      whaleRisk:
+
+        topHolderPercent >30
+
+        ? 
+
+        "HIGH"
+
+        :
+
+        "LOW"
+
 
 
     }
 
 
+
   };
+
 
 
 }
