@@ -1,6 +1,7 @@
 import TokenScanner from "@/components/TokenScanner";
 import RiskScore from "@/components/RiskScore";
 import WhaleTracker from "@/components/WhaleTracker";
+import SecurityScanner from "@/components/SecurityScanner";
 
 export default function Home() {
   return (
