@@ -1,87 +1,81 @@
-const RPC_URL =
-  "https://api.mainnet-beta.solana.com";
+import {
+  solanaRequest
+} from "./solanaRPC";
+
+
+
+const TOKEN_PROGRAM_ID =
+  "TokenkegQfeZyiNwAJbNbGKPFXCWvBvf9Ss623VQ5DA";
+
+
 
 
 
 export async function getTokenHolders(
   tokenAddress:string
-) {
+){
 
 
   try {
 
 
-    const response = await fetch(
 
-      RPC_URL,
+    const data =
 
-      {
+      await solanaRequest(
 
-        method:"POST",
+        "getProgramAccounts",
 
-        headers:{
+        [
 
-          "Content-Type":
-          "application/json"
-
-        },
+          TOKEN_PROGRAM_ID,
 
 
-        body:JSON.stringify({
+          {
 
-          jsonrpc:"2.0",
+            encoding:
+            "jsonParsed",
 
-          id:1,
 
-          method:
-          "getProgramAccounts",
+            filters:[
 
-          params:[
 
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+              {
 
-            {
+                dataSize:
+                165
 
-              encoding:"jsonParsed",
+              },
 
-              filters:[
 
-                {
+              {
 
-                  dataSize:165
+                memcmp:{
 
-                },
 
-                {
+                  offset:0,
 
-                  memcmp:{
 
-                    offset:0,
+                  bytes:
+                  tokenAddress
 
-                    bytes:
-                    tokenAddress
-
-                  }
 
                 }
 
-              ]
 
-            }
-
-          ]
-
-        })
-
-      }
-
-    );
+              }
 
 
+            ]
+
+          }
 
 
-    const data =
-      await response.json();
+        ]
+
+      );
+
+
 
 
 
@@ -89,22 +83,66 @@ export async function getTokenHolders(
 
     const holders =
 
-      data?.result?.map(
 
-        (item:any)=>({
+      data?.result
+
+      ?.map((item:any)=>{
+
+
+        const info =
+
+          item.account
+          ?.data
+          ?.parsed
+          ?.info;
+
+
+
+        return {
 
 
           address:
-          item.pubkey,
+
+            info?.owner,
+
+
+
+          tokenAccount:
+
+            item.pubkey,
+
 
 
           amount:
-          item.account.data.parsed.info.tokenAmount.uiAmount
+
+            Number(
+
+              info?.tokenAmount
+              ?.uiAmount || 0
+
+            )
 
 
-        })
 
-      ) || [];
+        };
+
+
+
+      })
+
+
+
+      ?.filter(
+
+        (wallet:any)=>
+
+          wallet.amount > 0
+
+      )
+
+      || [];
+
+
 
 
 
@@ -115,12 +153,21 @@ export async function getTokenHolders(
 
 
 
+
+
   }
 
   catch(error){
 
 
+    console.log(
+      "Holder fetch error:",
+      error
+    );
+
+
     return [];
+
 
   }
 
