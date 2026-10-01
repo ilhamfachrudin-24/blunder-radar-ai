@@ -1,5 +1,5 @@
 const RPC_URL =
-  "https://api.mainnet-beta.solana.com";
+  `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`;
 
 
 
