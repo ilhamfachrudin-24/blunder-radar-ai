@@ -1,14 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { getTokenHolders } from "@/lib/holderWallets";
 import { rankWallets } from "@/lib/walletRanking";
 
 
 export default function WhaleTracker() {
 
 
+  const [token, setToken] =
+    useState("");
+
+
+
   const [wallets, setWallets] =
     useState<any[]>([]);
+
 
 
   const [loading, setLoading] =
@@ -18,77 +25,43 @@ export default function WhaleTracker() {
 
 
 
-  async function scanSmartMoney() {
+  async function scanWhales() {
 
 
-    setLoading(true);
+    if (!token) return;
 
 
 
     try {
 
 
-      // Data sementara
-      // nanti diganti holder wallet API
-
-
-      const walletData = [
-
-
-        {
-
-          address:
-          "WalletExample111",
-
-
-          balance:
-          250,
-
-
-          transactions:
-          35
-
-        },
+      setLoading(true);
 
 
 
-        {
 
-          address:
-          "WalletExample222",
+      const holders =
 
-
-          balance:
-          40,
-
-
-          transactions:
-          15
-
-        }
-
-
-
-      ];
+        await getTokenHolders(token);
 
 
 
 
 
-      const ranking =
+      const ranked =
 
-        rankWallets(walletData);
-
-
+        rankWallets(holders);
 
 
-      setWallets(ranking);
+
+
+
+      setWallets(ranked);
 
 
 
 
     }
-
 
     finally {
 
@@ -109,7 +82,6 @@ export default function WhaleTracker() {
 
   return (
 
-
     <div className="card mt-10">
 
 
@@ -122,12 +94,37 @@ export default function WhaleTracker() {
 
 
 
-
       <p className="mt-3 text-gray-400">
 
-        Detect profitable wallets and whale activity.
+        Analyze token holders and discover smart money wallets.
 
       </p>
+
+
+
+
+
+
+      <input
+
+
+        value={token}
+
+
+        onChange={(e)=>
+
+          setToken(e.target.value)
+
+        }
+
+
+        placeholder="Enter Solana token address"
+
+
+        className="mt-5 w-full rounded-xl bg-black/40 border border-white/20 px-4 py-3"
+
+
+      />
 
 
 
@@ -137,17 +134,19 @@ export default function WhaleTracker() {
       <button
 
 
-        onClick={scanSmartMoney}
+        onClick={scanWhales}
 
 
-        className="mt-5 px-6 py-3 rounded-xl bg-white text-black font-bold"
+        className="mt-4 px-6 py-3 rounded-xl bg-white text-black font-bold"
 
 
       >
 
 
         {loading
-        ? "Scanning..."
+
+        ? "Scanning Holders..."
+
         : "Scan Smart Money"}
 
 
@@ -163,78 +162,62 @@ export default function WhaleTracker() {
 
 
 
-        {wallets.map((wallet,index)=>(
+      {wallets.slice(0,10).map(
+
+        (wallet,index)=>(
 
 
 
-          <div
+        <div
 
           key={index}
 
           className="border border-white/10 rounded-xl p-5"
 
-          >
+
+        >
 
 
 
-            <h3 className="font-bold text-xl">
+          <h3 className="text-xl font-bold">
 
-              #{index+1}
+            #{index+1}
 
-              {" "}
+            {" "}
 
-              {wallet.label}
+            {wallet.label}
 
-            </h3>
-
-
-
-
-
-
-            <p className="mt-2 text-gray-400">
-
-              Wallet:
-
-              {wallet.wallet}
-
-            </p>
+          </h3>
 
 
 
 
 
+          <p className="text-gray-400 mt-2">
 
+            Wallet:
 
-            <p>
+            {wallet.wallet}
 
-              Balance:
-
-              <span className="ml-2 text-green-400">
-
-                {wallet.balance} SOL
-
-              </span>
-
-            </p>
+          </p>
 
 
 
 
 
 
+          <p>
 
-            <p>
+            Token Amount:
 
-              Transactions:
+            <span className="ml-2 text-green-400">
 
-              <span className="ml-2">
+              {wallet.balance}
 
-                {wallet.transactions}
+            </span>
 
-              </span>
 
-            </p>
+          </p>
 
 
 
@@ -242,25 +225,26 @@ export default function WhaleTracker() {
 
 
 
+          <p className="mt-3 text-2xl font-bold gradient-text">
 
-            <p className="mt-3 text-2xl font-bold gradient-text">
+            Smart Score:
 
-              Smart Score:
+            {wallet.score}/100
 
-              {wallet.score}/100
-
-            </p>
-
+          </p>
 
 
 
 
 
-          </div>
+
+        </div>
 
 
 
-        ))}
+      ))}
+
+
 
 
 
