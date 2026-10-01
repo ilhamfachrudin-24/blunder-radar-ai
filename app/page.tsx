@@ -28,6 +28,8 @@ export default function Home() {
 
           <WhaleTracker />
 
+          <SecurityScanner />
+
         </div>
 
 
