@@ -1,89 +1,81 @@
-"use client";
-
-import { useEffect } from "react";
-import { useAnalysis } from "@/context/AnalysisContext";
-import { analyzeHolders } from "@/lib/holderAnalysis";
-
-export default function HolderAnalysis({
-  data
-}: Props) {
-
-  const {
-    analysis,
-    setAnalysis
-  } = useAnalysis();
-
-  const holders =
-    data?.holders || 0;
+export function calculateHolderScore(data: any) {
 
 
   let score = 50;
 
-  let status =
-    "Unknown";
+
+  const holders =
+
+    Number(data?.holders || 0);
+
+
 
 
   if (holders > 10000) {
 
+
     score += 30;
 
-    status =
-      "Distributed Holders";
 
   }
 
   else if (holders > 1000) {
 
+
     score += 15;
 
-    status =
-      "Moderate Distribution";
 
   }
 
-  else {
 
-    status =
-      "High Concentration Risk";
-
-  }
 
 
 
   if (score > 100) {
 
+
     score = 100;
+
 
   }
 
-useEffect(() => {
-
-  if (!analysis?.market) return;
 
 
-  const holders =
-    analyzeHolders({
-      holders:
-      analysis?.market?.holders || 0
-    });
 
 
-  setAnalysis({
-
-    ...analysis,
-
-    holders
-
-  });
+  let holderStatus = "High Concentration Risk";
 
 
-}, [analysis?.market]);
+
+
+  if (score >= 80) {
+
+
+    holderStatus = "Distributed Holders";
+
+
+  }
+
+  else if (score >= 60) {
+
+
+    holderStatus = "Moderate Distribution";
+
+
+  }
+
+
+
+
 
   return {
 
+
     holderScore: score,
 
-    holderStatus: status
+
+    holderStatus
+
 
   };
 
