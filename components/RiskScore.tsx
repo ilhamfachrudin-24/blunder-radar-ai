@@ -3,13 +3,13 @@
 import { useAnalysis } from "@/context/AnalysisContext";
 
 
-export default function RiskScore() {
+
+export default function RiskScore(){
+
 
 
   const {
-
     analysis
-
   } = useAnalysis();
 
 
@@ -20,11 +20,42 @@ export default function RiskScore() {
 
     analysis?.risk || {
 
-      score: 0,
 
-      level: "Waiting Analysis"
+      score:0,
+
+
+      level:
+      "Waiting Analysis"
+
 
     };
+
+
+
+
+
+
+  function getStatusStyle(){
+
+
+    if(risk.score >=80){
+
+      return "Strong Market Signal";
+
+    }
+
+
+    if(risk.score >=60){
+
+      return "Medium Risk";
+
+    }
+
+
+    return "High Risk";
+
+
+  }
 
 
 
@@ -38,6 +69,7 @@ export default function RiskScore() {
     <div className="card mt-10">
 
 
+
       <h2 className="text-2xl font-bold">
 
         ⚠️ Token Risk Score
@@ -48,10 +80,37 @@ export default function RiskScore() {
 
 
 
+
       <div className="mt-6 text-5xl font-bold gradient-text">
 
-
         {risk.score}/100
+
+      </div>
+
+
+
+
+
+
+
+      <div className="mt-6 w-full bg-white/10 rounded-full h-3">
+
+
+        <div
+
+
+          className="h-3 rounded-full bg-white transition-all"
+
+
+          style={{
+
+            width:
+            `${risk.score}%`
+
+          }}
+
+
+        />
 
 
       </div>
@@ -61,7 +120,8 @@ export default function RiskScore() {
 
 
 
-      <p className="mt-4 text-gray-300">
+
+      <p className="mt-5 text-gray-300">
 
 
         Risk Level:
@@ -83,25 +143,58 @@ export default function RiskScore() {
 
 
 
+
+      <p className="mt-2 text-gray-400">
+
+
+        AI Status:
+
+
+        <span className="ml-2 text-white">
+
+
+          {getStatusStyle()}
+
+
+        </span>
+
+
+      </p>
+
+
+
+
+
+
+
+
+
       <div className="mt-6">
+
 
 
         <p className="text-gray-400 text-sm">
 
-          Analysis based on:
+          Analysis Factors:
 
         </p>
+
+
+
 
 
 
         <ul className="mt-3 text-gray-300 space-y-2">
 
 
+
           <li>
 
-            ✓ Liquidity
+            ✓ Liquidity Strength
 
           </li>
+
+
 
 
           <li>
@@ -111,6 +204,8 @@ export default function RiskScore() {
           </li>
 
 
+
+
           <li>
 
             ✓ DEX Activity
@@ -118,10 +213,24 @@ export default function RiskScore() {
           </li>
 
 
+
+
+          <li>
+
+            ✓ Market Structure
+
+          </li>
+
+
+
         </ul>
 
 
+
+
       </div>
+
+
 
 
 
