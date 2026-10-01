@@ -1,20 +1,87 @@
+"use client";
+
+import { useAnalysis } from "@/context/AnalysisContext";
+
+
 export default function RiskScore() {
+
+
+  const {
+
+    analysis
+
+  } = useAnalysis();
+
+
+
+  const risk = analysis?.risk;
+
+
+
   return (
-    <div className="card">
 
-      <h3 className="text-xl font-bold">
-        Blunder AI Risk Score
-      </h3>
+    <div className="card mt-6">
 
-      <div className="text-5xl font-bold gradient-text mt-5">
-        82/100
-      </div>
 
-      <p className="mt-3 text-gray-300">
-        Liquidity healthy.
-        No major risk detected.
-      </p>
+      <h2 className="text-2xl font-bold">
+
+        ⚠️ Risk Score
+
+      </h2>
+
+
+
+
+      {!risk && (
+
+        <p className="mt-4 text-gray-400">
+
+          Waiting for token analysis...
+
+        </p>
+
+      )}
+
+
+
+
+
+
+      {risk && (
+
+        <div className="mt-5">
+
+
+          <div className="text-5xl font-bold gradient-text">
+
+            {risk.score}/100
+
+          </div>
+
+
+
+          <p className="mt-3 text-gray-300">
+
+            Risk Level:
+
+            <span className="ml-2 text-white">
+
+              {risk.level || "Analyzed"}
+
+            </span>
+
+          </p>
+
+
+
+        </div>
+
+      )}
+
+
 
     </div>
+
   );
+
 }
